@@ -29,7 +29,7 @@ mod tests {
     #[test]
     fn test_analize() {
         let class_info = ClassInfo::get_class_info_by_define(&String::from("test"));
-        let class_info_print = class_info.print_info();
-        println!("{}", class_info_print);
+        assert_eq!(class_info.this_calss_name, "test");
+        assert_eq!(class_info.super_calss_name, "test");
     }
 }
