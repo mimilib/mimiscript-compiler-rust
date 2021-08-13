@@ -23,7 +23,6 @@ impl ClassInfo {
 
 #[cfg(test)]
 mod tests {
-    // 注意这个惯用法：在 tests 模块中，从外部作用域导入所有名字。
     use super::*;
 
     #[test]
