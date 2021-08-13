@@ -4,13 +4,20 @@ pub struct ClassInfo {
 }
 
 impl ClassInfo {
-    pub fn analize_class_define(mut self, class_define: &String) -> Self {
-        self.this_calss_name = class_define.to_string();
-        self.super_calss_name = class_define.to_string();
-        return self;
+    pub fn get_class_info_by_define(class_define: &String) -> ClassInfo{
+        let mut new_class_info = ClassInfo {
+            this_calss_name: String::from("none"),
+            super_calss_name: String::from("none"),
+        };
+        new_class_info.this_calss_name = class_define.to_string();
+        new_class_info.super_calss_name = class_define.to_string();
+        return new_class_info;
     }
-    pub fn print(&self) {
-        println!("{}{}", self.super_calss_name, self.this_calss_name);
+    pub fn print_info(&self) -> String {
+        return format!(
+            "[info] this class name: {}, super class name: {}",
+            self.super_calss_name, self.this_calss_name
+        );
     }
 }
 
@@ -21,12 +28,8 @@ mod tests {
 
     #[test]
     fn test_analize() {
-        let class_info_void = ClassInfo {
-            this_calss_name: String::from("none"),
-            super_calss_name: String::from("none"),
-        };
-        let class_info = class_info_void.analize_class_define(&String::from("test"));
-        println!("test print");
-        class_info.print();
+        let class_info = ClassInfo::get_class_info_by_define(&String::from("test"));
+        let class_info_print = class_info.print_info();
+        println!("{}", class_info_print);
     }
 }

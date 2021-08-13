@@ -2,13 +2,9 @@ mod analize;
 use analize::*;
 
 fn main() {
-    let class_info_void = ClassInfo {
-        this_calss_name: String::from("none"),
-        super_calss_name: String::from("none"),
-    };
-    let class_info = class_info_void.analize_class_define(&String::from("test"));
-    println!("test print");
-    class_info.print()
+    let class_info = ClassInfo::get_class_info_by_define(&String::from("test"));
+    let class_info_print = class_info.print_info();
+    println!("{}", class_info_print);
 }
 
 pub fn add(a: i32, b: i32) -> i32 {
