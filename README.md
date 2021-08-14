@@ -1,1 +1,1 @@
-# pikacsript-compiler-rust
+# mimiscript-compiler-rust
