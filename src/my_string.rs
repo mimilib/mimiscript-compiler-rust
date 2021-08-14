@@ -3,7 +3,7 @@ pub fn cut(string: &String, start_char: char, end_char: char) -> Option<String> 
         Some(i) => i,
         None => return None,
     };
-    let end_index = match string.find(end_char) {
+    let end_index = match string.rfind(end_char) {
         Some(i) => i,
         None => return None,
     };

@@ -5,18 +5,16 @@ pub struct ClassInfo {
 }
 
 impl ClassInfo {
-    pub fn get_class_info_by_define(class_define: String) -> Option<ClassInfo> {
-        let class_define_without_prefix = class_define.strip_prefix("class ").unwrap().to_string();
-        let super_class_name =
-            match my_string::cut(&class_define_without_prefix, '(', ')') {
-                Some(s) => s,
-                None => return None,
-            };
-        let this_calss_name =
-            match my_string::get_first_token(&class_define_without_prefix, '(') {
-                Some(s) => s,
-                None => return None,
-            };
+    pub fn from(define: String) -> Option<ClassInfo> {
+        let define_without_prefix = define.strip_prefix("class ").unwrap().to_string();
+        let super_class_name = match my_string::cut(&define_without_prefix, '(', ')') {
+            Some(s) => s,
+            None => return None,
+        };
+        let this_calss_name = match my_string::get_first_token(&define_without_prefix, '(') {
+            Some(s) => s,
+            None => return None,
+        };
         let new_class_info = ClassInfo {
             this_class_name: this_calss_name,
             super_class_name: super_class_name,
@@ -38,13 +36,13 @@ mod tests {
     #[test]
     fn test_analize() {
         assert_eq!(
-            ClassInfo::get_class_info_by_define(String::from("class Test(SuperTest):"))
+            ClassInfo::from(String::from("class Test(SuperTest):"))
                 .unwrap()
                 .this_class_name,
             "Test"
         );
         assert_eq!(
-            ClassInfo::get_class_info_by_define(String::from("class Test(SuperTest):"))
+            ClassInfo::from(String::from("class Test(SuperTest):"))
                 .unwrap()
                 .super_class_name,
             "SuperTest"
