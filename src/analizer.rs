@@ -26,7 +26,7 @@ impl ClassInfo {
     pub fn print_info(&self) -> String {
         return format!(
             "[info] this class name: {}, super class name: {}",
-            self.super_calss_name, self.this_calss_name
+            self.this_calss_name, self.super_calss_name
         );
     }
 }
