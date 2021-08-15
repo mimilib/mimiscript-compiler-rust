@@ -12,23 +12,23 @@ pub struct PyType {
 }
 
 impl PyType {
-    pub fn to_c_type(self) -> Option<String> {
+    pub fn to_c_type(self) -> String {
         if self.type_name == "int" {
-            return Some("int".to_string());
+            return "int".to_string();
         }
         if self.type_name == "float" {
-            return Some("float".to_string());
+            return "float".to_string();
         }
         if self.type_name == "pointer" {
-            return Some("void *".to_string());
+            return "void *".to_string();
         }
         if self.type_name == "str" {
-            return Some("char *".to_string());
+            return "char *".to_string();
         }
         if self.type_name == "" {
-            return Some("void".to_string());
+            return "void".to_string();
         }
-        return None;
+        return format!("{} *", self.type_name);
     }
     pub fn to_string(&self) -> String {
         return self.type_name.clone();
@@ -64,13 +64,13 @@ impl MethodInfo {
         };
         return Some(method_info);
     }
-    pub fn get_define(self) -> String {
-        let return_token = match self.return_type {
+    pub fn get_define(&self) -> String {
+        let return_token = match &self.return_type {
             Some(s) => format!("->{}", s.to_string()),
             None => String::from(""),
         };
-        let type_list = match self.type_list {
-            Some(t) => t,
+        let type_list = match &self.type_list {
+            Some(t) => t.clone(),
             None => String::from(""),
         };
         let define = format!(
@@ -79,8 +79,14 @@ impl MethodInfo {
         );
         return define;
     }
-    fn get_return_fun_name(self) -> Option<String> {
-        match self.return_type {
+    pub fn get_method_fun_name(&self) -> String {
+        return format!(
+            "void {}_{}Method(MimiObj *self, Args *args){{\n",
+            self.class_name, self.name
+        );
+    }
+    fn get_return_fun_name(&self) -> Option<String> {
+        match &self.return_type {
             Some(return_type) => {
                 if return_type.to_string() == "int" {
                     return Some("method_returnInt".to_string());
@@ -210,11 +216,14 @@ mod tests {
     }
     #[test]
     fn test_get_define_no_return_no_type_list() {
-        let method_info = MethodInfo::new(&String::from("Test"), String::from("def test():"));
-        let define = method_info.unwrap().get_define();
+        let method_info =
+            MethodInfo::new(&String::from("Test"), String::from("def test():")).unwrap();
+        let define = method_info.get_define();
+        let method_fun_name = method_info.get_method_fun_name();
         assert_eq!(
             define,
             String::from("    class_defineMethod(self, \"test()\", Test_testMethod);\n")
         );
+        assert_eq!(method_fun_name, String::from("void Test_testMethod(MimiObj *self, Args *args){\n"));
     }
 }
