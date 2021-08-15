@@ -1,13 +1,14 @@
 use crate::my_string;
 
 pub struct MethodInfo {
+    pub class_name: String,
     pub name: String,
     pub type_list: Option<String>,
     pub return_type: Option<String>,
 }
 
 impl MethodInfo {
-    pub fn from(input_define: String) -> Option<MethodInfo> {
+    pub fn from(class_name: &String, input_define: String) -> Option<MethodInfo> {
         let define = match input_define.strip_prefix("    def ") {
             Some(define) => define.to_string(),
             None => return None,
@@ -23,6 +24,7 @@ impl MethodInfo {
             name: name,
             type_list: type_list,
             return_type: return_type,
+            class_name: class_name.clone(),
         };
         return Some(method_info);
     }
@@ -35,62 +37,86 @@ mod tests {
     #[test]
     fn test_analize() {
         assert_eq!(
-            MethodInfo::from(String::from("    def test(test:str)->str:"))
-                .unwrap()
-                .name,
+            MethodInfo::from(
+                &String::from("Test"),
+                String::from("    def test(test:str)->str:")
+            )
+            .unwrap()
+            .name,
             String::from("test")
         );
         assert_eq!(
-            MethodInfo::from(String::from("    def test(test:str)->str:"))
-                .unwrap()
-                .return_type
-                .unwrap(),
+            MethodInfo::from(
+                &String::from("Test"),
+                String::from("    def test(test:str)->str:")
+            )
+            .unwrap()
+            .return_type
+            .unwrap(),
             String::from("str")
         );
         assert_eq!(
-            MethodInfo::from(String::from("    def test(test:str)->str:"))
-                .unwrap()
-                .type_list
-                .unwrap(),
+            MethodInfo::from(
+                &String::from("Test"),
+                String::from("    def test(test:str)->str:")
+            )
+            .unwrap()
+            .type_list
+            .unwrap(),
             String::from("test:str")
         );
         assert_eq!(
-            MethodInfo::from(String::from("    def test(test: str) ->str:"))
-                .unwrap()
-                .name,
+            MethodInfo::from(
+                &String::from("Test"),
+                String::from("    def test(test: str) ->str:")
+            )
+            .unwrap()
+            .name,
             String::from("test")
         );
         assert_eq!(
-            MethodInfo::from(String::from("    def test(test: str) ->str:"))
-                .unwrap()
-                .return_type
-                .unwrap(),
+            MethodInfo::from(
+                &String::from("Test"),
+                String::from("    def test(test: str) ->str:")
+            )
+            .unwrap()
+            .return_type
+            .unwrap(),
             String::from("str")
         );
         assert_eq!(
-            MethodInfo::from(String::from("    def test(test: str) ->str:"))
-                .unwrap()
-                .type_list
-                .unwrap(),
+            MethodInfo::from(
+                &String::from("Test"),
+                String::from("    def test(test: str) ->str:")
+            )
+            .unwrap()
+            .type_list
+            .unwrap(),
             String::from("test:str")
         );
         assert_eq!(
-            MethodInfo::from(String::from("    def test() ->str:"))
+            MethodInfo::from(&String::from("Test"), String::from("    def test() ->str:"))
                 .unwrap()
                 .type_list,
             None
         );
         assert_eq!(
-            MethodInfo::from(String::from("    def test(test: str, test2: int) ->str:"))
-                .unwrap()
-                .type_list
-                .unwrap(),
+            MethodInfo::from(
+                &String::from("Test"),
+                String::from("    def test(test: str, test2: int) ->str:")
+            )
+            .unwrap()
+            .type_list
+            .unwrap(),
             String::from("test:str,test2:int")
         );
         assert_eq!(
-            MethodInfo::from(String::from("    def test(test: str, test2: int)"))
-                .unwrap()
-                .return_type,
+            MethodInfo::from(
+                &String::from("Test"),
+                String::from("    def test(test: str, test2: int)")
+            )
+            .unwrap()
+            .return_type,
             None
         );
     }
