@@ -4,7 +4,40 @@ pub struct MethodInfo {
     pub class_name: String,
     pub name: String,
     pub type_list: Option<String>,
-    pub return_type: Option<String>,
+    pub return_type: Option<PyType>,
+}
+
+pub struct PyType {
+    type_name: String,
+}
+
+impl PyType {
+    pub fn to_c_type(self) -> Option<String> {
+        if self.type_name == "int" {
+            return Some("int".to_string());
+        }
+        if self.type_name == "float" {
+            return Some("float".to_string());
+        }
+        if self.type_name == "pointer" {
+            return Some("void *".to_string());
+        }
+        if self.type_name == "str" {
+            return Some("char *".to_string());
+        }
+        if self.type_name == "" {
+            return Some("void".to_string());
+        }
+        return None;
+    }
+    pub fn to_string(&self) -> String {
+        return self.type_name.clone();
+    }
+    pub fn new(type_name: &String) -> PyType {
+        return PyType {
+            type_name: type_name.clone(),
+        };
+    }
 }
 
 impl MethodInfo {
@@ -19,7 +52,10 @@ impl MethodInfo {
             None => return None,
         };
         let type_list = my_string::cut(&define, '(', ')');
-        let return_type = my_string::cut(&define, '>', ':');
+        let return_type = match my_string::cut(&define, '>', ':') {
+            Some(py_type) => Some(PyType::new(&py_type)),
+            None => None,
+        };
         let method_info = MethodInfo {
             name: name,
             type_list: type_list,
@@ -30,7 +66,7 @@ impl MethodInfo {
     }
     pub fn get_define(self) -> String {
         let return_token = match self.return_type {
-            Some(s) => format!("->{}", s),
+            Some(s) => format!("->{}", s.to_string()),
             None => String::from(""),
         };
         let type_list = match self.type_list {
@@ -42,6 +78,26 @@ impl MethodInfo {
             self.name, type_list, return_token, self.class_name, self.name
         );
         return define;
+    }
+    fn get_return_fun_name(self) -> Option<String> {
+        match self.return_type {
+            Some(return_type) => {
+                if return_type.to_string() == "int" {
+                    return Some("method_returnInt".to_string());
+                }
+                if return_type.to_string() == "float" {
+                    return Some("method_returnFloat".to_string());
+                }
+                if return_type.to_string() == "pointer" {
+                    return Some("method_returnPtr".to_string());
+                }
+                if return_type.to_string() == "str" {
+                    return Some("method_returnStr".to_string());
+                }
+                return Some("method_returnPtr".to_string());
+            }
+            None => return None,
+        }
     }
 }
 
@@ -67,7 +123,8 @@ mod tests {
             )
             .unwrap()
             .return_type
-            .unwrap(),
+            .unwrap()
+            .to_string(),
             String::from("str")
         );
         assert_eq!(
@@ -96,7 +153,8 @@ mod tests {
             )
             .unwrap()
             .return_type
-            .unwrap(),
+            .unwrap()
+            .to_string(),
             String::from("str")
         );
         assert_eq!(
@@ -122,17 +180,9 @@ mod tests {
             )
             .unwrap()
             .type_list
-            .unwrap(),
-            String::from("test:str,test2:int")
-        );
-        assert_eq!(
-            MethodInfo::new(
-                &String::from("Test"),
-                String::from("def test(test: str, test2: int):")
-            )
             .unwrap()
-            .return_type,
-            None
+            .to_string(),
+            String::from("test:str,test2:int")
         );
     }
     #[test]
@@ -151,15 +201,20 @@ mod tests {
             String::from("def test(test:str, test2:int):"),
         );
         let define = method_info.unwrap().get_define();
-        assert_eq!(define, String::from("    class_defineMethod(self, \"test(test:str,test2:int)\", Test_testMethod);\n"));
+        assert_eq!(
+            define,
+            String::from(
+                "    class_defineMethod(self, \"test(test:str,test2:int)\", Test_testMethod);\n"
+            )
+        );
     }
     #[test]
     fn test_get_define_no_return_no_type_list() {
-        let method_info = MethodInfo::new(
-            &String::from("Test"),
-            String::from("def test():"),
-        );
+        let method_info = MethodInfo::new(&String::from("Test"), String::from("def test():"));
         let define = method_info.unwrap().get_define();
-        assert_eq!(define, String::from("    class_defineMethod(self, \"test()\", Test_testMethod);\n"));
+        assert_eq!(
+            define,
+            String::from("    class_defineMethod(self, \"test()\", Test_testMethod);\n")
+        );
     }
 }

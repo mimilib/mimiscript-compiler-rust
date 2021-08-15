@@ -101,8 +101,9 @@ mod tests {
                 .get("test")
                 .unwrap()
                 .return_type
-                .clone()
-                .unwrap(),
+                .as_ref()
+                .unwrap()
+                .to_string(),
             "str"
         );
         assert_eq!(
