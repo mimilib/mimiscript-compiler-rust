@@ -11,7 +11,7 @@ pub struct ClassInfo {
 }
 
 impl ClassInfo {
-    pub fn new(define: String) -> Option<ClassInfo> {
+    pub fn new(define: &String) -> Option<ClassInfo> {
         let define_without_prefix = define.strip_prefix("class ").unwrap().to_string();
         let super_class_name = match my_string::cut(&define_without_prefix, '(', ')') {
             Some(s) => s,
@@ -70,13 +70,13 @@ mod tests {
     #[test]
     fn test_analize() {
         assert_eq!(
-            ClassInfo::new(String::from("class Test(SuperTest):"))
+            ClassInfo::new(&String::from("class Test(SuperTest):"))
                 .unwrap()
                 .this_class_name,
             "Test"
         );
         assert_eq!(
-            ClassInfo::new(String::from("class Test(SuperTest):"))
+            ClassInfo::new(&String::from("class Test(SuperTest):"))
                 .unwrap()
                 .super_class_name,
             "SuperTest"
@@ -84,7 +84,7 @@ mod tests {
     }
     #[test]
     fn test_push_method() {
-        let mut class_info = ClassInfo::new(String::from("class Test(SuperTest):")).unwrap();
+        let mut class_info = ClassInfo::new(&String::from("class Test(SuperTest):")).unwrap();
         class_info.push_method(String::from("def test(data: str)-> str:"));
         assert_eq!(class_info.method_list[0].class_name, "Test");
         assert_eq!(class_info.method_list[0].name, "test");
@@ -99,7 +99,7 @@ mod tests {
     }
     #[test]
     fn test_push_object() {
-        let mut class_info = ClassInfo::new(String::from("class Test(SuperTest):")).unwrap();
+        let mut class_info = ClassInfo::new(&String::from("class Test(SuperTest):")).unwrap();
         class_info.push_object(String::from("testObj = TestObj()"));
         assert_eq!(class_info.object_list[0].class_name, "Test");
         assert_eq!(class_info.object_list[0].name, "testObj");
@@ -108,7 +108,7 @@ mod tests {
     }
     #[test]
     fn test_push_import() {
-        let mut class_info = ClassInfo::new(String::from("class Test(SuperTest):")).unwrap();
+        let mut class_info = ClassInfo::new(&String::from("class Test(SuperTest):")).unwrap();
         class_info.push_import(String::from("TestObj()"));
         assert_eq!(class_info.import_list[0].class_name, "Test");
         assert_eq!(class_info.import_list[0].import_class_name, "TestObj");
