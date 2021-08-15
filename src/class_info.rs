@@ -2,12 +2,13 @@ use crate::import_info::ImportInfo;
 use crate::method_info::MethodInfo;
 use crate::my_string;
 use crate::object_info::ObjectInfo;
+use std::collections::HashMap;
 pub struct ClassInfo {
     pub this_class_name: String,
     pub super_class_name: String,
-    pub method_list: Vec<MethodInfo>,
-    pub object_list: Vec<ObjectInfo>,
-    pub import_list: Vec<ImportInfo>,
+    pub method_list: HashMap<String, MethodInfo>,
+    pub object_list: HashMap<String, ObjectInfo>,
+    pub import_list: HashMap<String, ImportInfo>,
 }
 
 impl ClassInfo {
@@ -24,35 +25,38 @@ impl ClassInfo {
         let new_class_info = ClassInfo {
             this_class_name: this_calss_name,
             super_class_name: super_class_name,
-            method_list: vec![],
-            object_list: vec![],
-            import_list: vec![],
+            method_list: HashMap::new(),
+            object_list: HashMap::new(),
+            import_list: HashMap::new(),
         };
         return Some(new_class_info);
     }
     pub fn push_method(&mut self, method_define: String) {
-        self.method_list.push(
-            match MethodInfo::new(&self.this_class_name, method_define) {
-                Some(method) => method,
-                None => return,
-            },
-        );
+        let method_info = match MethodInfo::new(&self.this_class_name, method_define) {
+            Some(method) => method,
+            None => return,
+        };
+        self.method_list
+            .entry(method_info.name.clone())
+            .or_insert(method_info);
     }
     pub fn push_import(&mut self, import_define: String) {
-        self.import_list.push(
-            match ImportInfo::new(&self.this_class_name, import_define) {
-                Some(import) => import,
-                None => return,
-            },
-        );
+        let import_info = match ImportInfo::new(&self.this_class_name, import_define) {
+            Some(import) => import,
+            None => return,
+        };
+        self.import_list
+            .entry(import_info.import_class_name.clone())
+            .or_insert(import_info);
     }
     pub fn push_object(&mut self, object_define: String) {
-        self.object_list.push(
-            match ObjectInfo::new(&self.this_class_name, object_define) {
-                Some(object) => object,
-                None => return,
-            },
-        );
+        let object_info = match ObjectInfo::new(&self.this_class_name, object_define) {
+            Some(object) => object,
+            None => return,
+        };
+        self.object_list
+            .entry(object_info.name.clone())
+            .or_insert(object_info);
     }
 
     pub fn print_info(&self) -> String {

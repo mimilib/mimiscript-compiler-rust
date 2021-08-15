@@ -1,57 +1,79 @@
 use crate::class_info::ClassInfo;
-pub struct Compiler<'a> {
-    pub class_list: Vec<ClassInfo>,
-    pub class_now: &'a mut ClassInfo,
+use std::collections::HashMap;
+pub struct Compiler {
+    pub class_list: HashMap<String, ClassInfo>,
+    pub class_now_name: Option<String>,
 }
 
-impl<'a> Compiler<'a> {
-    fn analize_line(&'a mut self, line: String) -> bool {
-        if line.starts_with("#") {
-            return true;
-        }
-        if line.starts_with("class") {
-            let mut class_now = match ClassInfo::new(&line) {
-                Some(s) => s,
-                None => return false,
-            };
-            self.class_list.push(class_now);
-            self.class_now = self.class_list.last_mut().unwrap();
-            return true;
-        }
-        if line.starts_with("    def ") {
-            let line = line.strip_prefix("    ").unwrap().to_string();
-            self.class_now.push_method(line);
-            return true;
-        }
-        if line.starts_with("    ")
-            && line.contains("(")
-            && line.contains(")")
-            && line.contains("=")
-        {
-            let line = line.strip_prefix("    ").unwrap().to_string();
-            self.class_now.push_object(line);
-            return true;
-        }
-        if line.starts_with("    ") && line.contains("(") && line.contains(")") {
-            let line = line.strip_prefix("    ").unwrap().to_string();
-            self.class_now.push_import(line);
-            return true;
-        }
-        return false;
-    }
-}
+// impl Compiler {
+//     fn analize_line(mut compiler: Compiler, line: String) -> Option<Compiler> {
+//         if line.starts_with("#") {
+//             return Some(compiler);
+//         }
+//         if line.starts_with("class") {
+//             let mut class_now = match ClassInfo::new(&line) {
+//                 Some(s) => s,
+//                 None => return None,
+//             };
+//             compiler.class_list.push(class_now);
+//             compiler.class_now_name = match compiler.class_list.last() {
+//                 Some(s) => Some(s.this_class_name.clone()),
+//                 None => None,
+//             };
+//             return Some(compiler);
+//         }
+//         if line.starts_with("    def ") {
+//             let line = line.strip_prefix("    ").unwrap().to_string();
+//             let mut class_now: &mut ClassInfo;
+//             for class_info in &compiler.class_list {
+//                 if class_info.this_class_name == compiler.class_now_name.clone().unwrap() {
+//                     class_now = &class_info;
+//                 }
+//             }
+//             class_now.push_method(line);
+//             return Some(compiler);
+//         }
+//         if line.starts_with("    ")
+//             && line.contains("(")
+//             && line.contains(")")
+//             && line.contains("=")
+//         {
+//             let line = line.strip_prefix("    ").unwrap().to_string();
+//             let class_now: &ClassInfo;
+//             for class_info in &compiler.class_list {
+//                 if class_info.this_class_name == compiler.class_now_name.unwrap() {
+//                     class_now = &class_info;
+//                 }
+//             }
+//             class_now.push_object(line);
+//             return Some(compiler);
+//         }
+//         if line.starts_with("    ") && line.contains("(") && line.contains(")") {
+//             let line = line.strip_prefix("    ").unwrap().to_string();
+//             let class_now: &ClassInfo;
+//             for class_info in &compiler.class_list {
+//                 if class_info.this_class_name == compiler.class_now_name.unwrap() {
+//                     class_now = &class_info;
+//                 }
+//             }
+//             class_now.push_import(line);
+//             return Some(compiler);
+//         }
+//         return None;
+//     }
+// }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
 
-    #[test]
-    fn test_analyze() {
-        let mut compiler = Compiler{
-            class_now: &mut ClassInfo::new(&String::from("class Root(BaseObj):")).unwrap(),
-            class_list: vec![],
-        };
-        compiler.analize_line(String::from("class Test(SuperTest):"));
-        compiler.analize_line(String::from("    def test()"));
-    }
-}
+//     #[test]
+//     fn test_analyze() {
+//         let mut compiler = Compiler {
+//             class_now_name: &mut ClassInfo::new(&String::from("class Root(BaseObj):")).unwrap(),
+//             class_list: vec![],
+//         };
+//         compiler.analize_line(String::from("class Test(SuperTest):"));
+//         compiler.analize_line(String::from("    def test()"));
+//     }
+// }

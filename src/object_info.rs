@@ -1,5 +1,4 @@
 use crate::my_string;
-
 pub struct ObjectInfo {
     pub class_name: String,
     pub name: String,
