@@ -20,6 +20,13 @@ pub fn get_first_token(string: &String, end_char: char) -> Option<String> {
     };
 }
 
+pub fn get_last_token(string: &String, end_char: char) -> Option<String> {
+    return match string.rsplit_once(end_char) {
+        Some(s) => Some(s.1.to_string()),
+        None => None,
+    };
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -37,6 +44,10 @@ mod tests {
         assert_eq!(
             get_first_token(&String::from("test("), '(',),
             Some(String::from("test"))
+        );
+        assert_eq!(
+            get_last_token(&String::from("test=Test"), '=',),
+            Some(String::from("Test"))
         );
     }
 }
