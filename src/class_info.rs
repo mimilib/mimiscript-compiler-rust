@@ -11,7 +11,7 @@ pub struct ClassInfo {
 }
 
 impl ClassInfo {
-    pub fn from(define: String) -> Option<ClassInfo> {
+    pub fn new(define: String) -> Option<ClassInfo> {
         let define_without_prefix = define.strip_prefix("class ").unwrap().to_string();
         let super_class_name = match my_string::cut(&define_without_prefix, '(', ')') {
             Some(s) => s,
@@ -31,13 +31,30 @@ impl ClassInfo {
         return Some(new_class_info);
     }
     pub fn push_method(&mut self, method_define: String) {
-        let method_info = match MethodInfo::from(&self.this_class_name, method_define) {
-            Some(method) => method,
-            None => return,
-        };
-
-        self.method_list.push(method_info);
+        self.method_list.push(
+            match MethodInfo::new(&self.this_class_name, method_define) {
+                Some(method) => method,
+                None => return,
+            },
+        );
     }
+    pub fn push_import(&mut self, import_define: String) {
+        self.import_list.push(
+            match ImportInfo::new(&self.this_class_name, import_define) {
+                Some(import) => import,
+                None => return,
+            },
+        );
+    }
+    pub fn push_object(&mut self, object_define: String) {
+        self.object_list.push(
+            match ObjectInfo::new(&self.this_class_name, object_define) {
+                Some(object) => object,
+                None => return,
+            },
+        );
+    }
+
     pub fn print_info(&self) -> String {
         return format!(
             "[info] this class name: {}, super class name: {}",
@@ -53,13 +70,13 @@ mod tests {
     #[test]
     fn test_analize() {
         assert_eq!(
-            ClassInfo::from(String::from("class Test(SuperTest):"))
+            ClassInfo::new(String::from("class Test(SuperTest):"))
                 .unwrap()
                 .this_class_name,
             "Test"
         );
         assert_eq!(
-            ClassInfo::from(String::from("class Test(SuperTest):"))
+            ClassInfo::new(String::from("class Test(SuperTest):"))
                 .unwrap()
                 .super_class_name,
             "SuperTest"
@@ -67,8 +84,8 @@ mod tests {
     }
     #[test]
     fn test_push_method() {
-        let mut class_info = ClassInfo::from(String::from("class Test(SuperTest):")).unwrap();
-        class_info.push_method(String::from("    def test(data: str)-> str:"));
+        let mut class_info = ClassInfo::new(String::from("class Test(SuperTest):")).unwrap();
+        class_info.push_method(String::from("def test(data: str)-> str:"));
         assert_eq!(class_info.method_list[0].class_name, "Test");
         assert_eq!(class_info.method_list[0].name, "test");
         assert_eq!(

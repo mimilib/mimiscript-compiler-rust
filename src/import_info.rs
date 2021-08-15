@@ -2,17 +2,19 @@ use crate::my_string;
 
 pub struct ImportInfo {
     pub class_name: String,
+    pub import_class_name: String,
 }
 
 impl ImportInfo {
-    pub fn from(input_define: String) -> Option<ImportInfo> {
+    pub fn new(class_name: &String, input_define: String) -> Option<ImportInfo> {
         let define = input_define.replace(" ", "");
-        let class_name = match my_string::get_first_token(&define, '(') {
+        let import_class_name = match my_string::get_first_token(&define, '(') {
             Some(token) => token,
             None => return None,
         };
-        return Some(ImportInfo{
-            class_name: class_name,
+        return Some(ImportInfo {
+            class_name: class_name.clone(),
+            import_class_name: import_class_name,
         });
     }
 }
@@ -24,7 +26,13 @@ mod tests {
     #[test]
     fn test_import_info() {
         assert_eq!(
-            ImportInfo::from(String::from("    Test()"))
+            ImportInfo::new(&String::from("Test"), String::from("ImportTest()"))
+                .unwrap()
+                .import_class_name,
+            String::from("ImportTest")
+        );
+        assert_eq!(
+            ImportInfo::new(&String::from("Test"), String::from("ImportTest()"))
                 .unwrap()
                 .class_name,
             String::from("Test")

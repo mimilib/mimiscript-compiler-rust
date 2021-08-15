@@ -9,9 +9,9 @@ use method_info::*;
 use object_info::*;
 
 fn main() {
-    MethodInfo::from(
+    MethodInfo::new(
         &String::from("Test"),
-        String::from("    def test(test:str)->str:"),
+        String::from("def test(test:str)->str:"),
     )
     .unwrap()
     .name;

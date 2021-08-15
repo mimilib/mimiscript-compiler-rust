@@ -8,8 +8,8 @@ pub struct MethodInfo {
 }
 
 impl MethodInfo {
-    pub fn from(class_name: &String, input_define: String) -> Option<MethodInfo> {
-        let define = match input_define.strip_prefix("    def ") {
+    pub fn new(class_name: &String, input_define: String) -> Option<MethodInfo> {
+        let define = match input_define.strip_prefix("def ") {
             Some(define) => define.to_string(),
             None => return None,
         };
@@ -37,18 +37,18 @@ mod tests {
     #[test]
     fn test_analize() {
         assert_eq!(
-            MethodInfo::from(
+            MethodInfo::new(
                 &String::from("Test"),
-                String::from("    def test(test:str)->str:")
+                String::from("def test(test:str)->str:")
             )
             .unwrap()
             .name,
             String::from("test")
         );
         assert_eq!(
-            MethodInfo::from(
+            MethodInfo::new(
                 &String::from("Test"),
-                String::from("    def test(test:str)->str:")
+                String::from("def test(test:str)->str:")
             )
             .unwrap()
             .return_type
@@ -56,9 +56,9 @@ mod tests {
             String::from("str")
         );
         assert_eq!(
-            MethodInfo::from(
+            MethodInfo::new(
                 &String::from("Test"),
-                String::from("    def test(test:str)->str:")
+                String::from("def test(test:str)->str:")
             )
             .unwrap()
             .type_list
@@ -66,18 +66,18 @@ mod tests {
             String::from("test:str")
         );
         assert_eq!(
-            MethodInfo::from(
+            MethodInfo::new(
                 &String::from("Test"),
-                String::from("    def test(test: str) ->str:")
+                String::from("def test(test: str) ->str:")
             )
             .unwrap()
             .name,
             String::from("test")
         );
         assert_eq!(
-            MethodInfo::from(
+            MethodInfo::new(
                 &String::from("Test"),
-                String::from("    def test(test: str) ->str:")
+                String::from("def test(test: str) ->str:")
             )
             .unwrap()
             .return_type
@@ -85,9 +85,9 @@ mod tests {
             String::from("str")
         );
         assert_eq!(
-            MethodInfo::from(
+            MethodInfo::new(
                 &String::from("Test"),
-                String::from("    def test(test: str) ->str:")
+                String::from("def test(test: str) ->str:")
             )
             .unwrap()
             .type_list
@@ -95,15 +95,15 @@ mod tests {
             String::from("test:str")
         );
         assert_eq!(
-            MethodInfo::from(&String::from("Test"), String::from("    def test() ->str:"))
+            MethodInfo::new(&String::from("Test"), String::from("def test() ->str:"))
                 .unwrap()
                 .type_list,
             None
         );
         assert_eq!(
-            MethodInfo::from(
+            MethodInfo::new(
                 &String::from("Test"),
-                String::from("    def test(test: str, test2: int) ->str:")
+                String::from("def test(test: str, test2: int) ->str:")
             )
             .unwrap()
             .type_list
@@ -111,9 +111,9 @@ mod tests {
             String::from("test:str,test2:int")
         );
         assert_eq!(
-            MethodInfo::from(
+            MethodInfo::new(
                 &String::from("Test"),
-                String::from("    def test(test: str, test2: int)")
+                String::from("def test(test: str, test2: int)")
             )
             .unwrap()
             .return_type,
