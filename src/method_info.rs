@@ -28,6 +28,21 @@ impl MethodInfo {
         };
         return Some(method_info);
     }
+    pub fn get_define(self) -> String {
+        let return_token = match self.return_type {
+            Some(s) => format!("->{}", s),
+            None => String::from(""),
+        };
+        let type_list = match self.type_list {
+            Some(t) => t,
+            None => String::from(""),
+        };
+        let define = format!(
+            "    class_defineMethod(self, \"{}({}){}\", {}_{}Method);\n",
+            self.name, type_list, return_token, self.class_name, self.name
+        );
+        return define;
+    }
 }
 
 #[cfg(test)]
@@ -113,11 +128,20 @@ mod tests {
         assert_eq!(
             MethodInfo::new(
                 &String::from("Test"),
-                String::from("def test(test: str, test2: int)")
+                String::from("def test(test: str, test2: int):")
             )
             .unwrap()
             .return_type,
             None
         );
+    }
+    #[test]
+    fn test_get_define() {
+        let method_info = MethodInfo::new(
+            &String::from("Test"),
+            String::from("def test(test:str, test2:int)->str:"),
+        );
+        let define = method_info.unwrap().get_define();
+        assert_eq!(define, String::from("    class_defineMethod(self, \"test(test:str,test2:int)->str\", Test_testMethod);\n"));
     }
 }

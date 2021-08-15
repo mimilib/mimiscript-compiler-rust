@@ -73,6 +73,7 @@ mod tests {
         let compiler =
             Compiler::analyze_line(compiler, String::from("    testObj = TestObj()")).unwrap();
         let compiler = Compiler::analyze_line(compiler, String::from("    TestImport()")).unwrap();
+
         let class_info = compiler.class_list.get("Test").unwrap();
         let method_info = class_info.method_list.get("test").unwrap();
         let object_info = class_info.object_list.get("testObj").unwrap();
