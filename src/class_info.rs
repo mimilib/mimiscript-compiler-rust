@@ -97,4 +97,20 @@ mod tests {
             "data:str"
         );
     }
+    #[test]
+    fn test_push_object() {
+        let mut class_info = ClassInfo::new(String::from("class Test(SuperTest):")).unwrap();
+        class_info.push_object(String::from("testObj = TestObj()"));
+        assert_eq!(class_info.object_list[0].class_name, "Test");
+        assert_eq!(class_info.object_list[0].name, "testObj");
+        assert_eq!(class_info.object_list[0].import_class_name, "TestObj");
+        assert_eq!(class_info.object_list[0].name, "testObj");
+    }
+    #[test]
+    fn test_push_import() {
+        let mut class_info = ClassInfo::new(String::from("class Test(SuperTest):")).unwrap();
+        class_info.push_import(String::from("TestObj()"));
+        assert_eq!(class_info.import_list[0].class_name, "Test");
+        assert_eq!(class_info.import_list[0].import_class_name, "TestObj");
+    }
 }
