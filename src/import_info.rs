@@ -1,0 +1,33 @@
+use crate::my_string;
+
+pub struct ImportInfo {
+    pub class_name: String,
+}
+
+impl ImportInfo {
+    pub fn from(input_define: String) -> Option<ImportInfo> {
+        let define = input_define.replace(" ", "");
+        let class_name = match my_string::get_first_token(&define, '(') {
+            Some(token) => token,
+            None => return None,
+        };
+        return Some(ImportInfo{
+            class_name: class_name,
+        });
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_import_info() {
+        assert_eq!(
+            ImportInfo::from(String::from("    Test()"))
+                .unwrap()
+                .class_name,
+            String::from("Test")
+        );
+    }
+}

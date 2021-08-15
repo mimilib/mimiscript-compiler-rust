@@ -30,13 +30,13 @@ mod tests {
     #[test]
     fn test_object_info() {
         assert_eq!(
-            ObjectInfo::from(String::from("test=Test()"))
+            ObjectInfo::from(String::from("    test=Test()"))
                 .unwrap()
                 .class_name,
             String::from("Test")
         );
         assert_eq!(
-            ObjectInfo::from(String::from("test=Test()")).unwrap().name,
+            ObjectInfo::from(String::from("    test=Test()")).unwrap().name,
             String::from("test")
         );
     }
