@@ -144,4 +144,22 @@ mod tests {
         let define = method_info.unwrap().get_define();
         assert_eq!(define, String::from("    class_defineMethod(self, \"test(test:str,test2:int)->str\", Test_testMethod);\n"));
     }
+    #[test]
+    fn test_get_define_no_return() {
+        let method_info = MethodInfo::new(
+            &String::from("Test"),
+            String::from("def test(test:str, test2:int):"),
+        );
+        let define = method_info.unwrap().get_define();
+        assert_eq!(define, String::from("    class_defineMethod(self, \"test(test:str,test2:int)\", Test_testMethod);\n"));
+    }
+    #[test]
+    fn test_get_define_no_return_no_type_list() {
+        let method_info = MethodInfo::new(
+            &String::from("Test"),
+            String::from("def test():"),
+        );
+        let define = method_info.unwrap().get_define();
+        assert_eq!(define, String::from("    class_defineMethod(self, \"test()\", Test_testMethod);\n"));
+    }
 }
