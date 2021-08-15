@@ -7,6 +7,9 @@ pub fn cut(string: &String, start_char: char, end_char: char) -> Option<String> 
         Some(i) => i,
         None => return None,
     };
+    if start_index + 1 == end_index {
+        return None;
+    }
     return Some(string[start_index + 1..end_index].to_string());
 }
 
