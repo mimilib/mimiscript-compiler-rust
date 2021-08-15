@@ -5,23 +5,23 @@ pub struct Compiler<'a> {
 }
 
 impl<'a> Compiler<'a> {
-    fn analize_line(&mut self, line: String) -> Option<Self>{
+    fn analize_line(&'a mut self, line: String) -> bool {
         if line.starts_with("#") {
-            return None;
+            return true;
         }
         if line.starts_with("class") {
             let mut class_now = match ClassInfo::new(&line) {
                 Some(s) => s,
-                None => return None,
+                None => return false,
             };
             self.class_list.push(class_now);
             self.class_now = self.class_list.last_mut().unwrap();
-            return Some(*self);
+            return true;
         }
         if line.starts_with("    def ") {
             let line = line.strip_prefix("    ").unwrap().to_string();
             self.class_now.push_method(line);
-            return Some(*self);
+            return true;
         }
         if line.starts_with("    ")
             && line.contains("(")
@@ -30,14 +30,14 @@ impl<'a> Compiler<'a> {
         {
             let line = line.strip_prefix("    ").unwrap().to_string();
             self.class_now.push_object(line);
-            return Some(*self);
+            return true;
         }
         if line.starts_with("    ") && line.contains("(") && line.contains(")") {
             let line = line.strip_prefix("    ").unwrap().to_string();
             self.class_now.push_import(line);
-            return Some(*self);
+            return true;
         }
-        return None;
+        return false;
     }
 }
 
