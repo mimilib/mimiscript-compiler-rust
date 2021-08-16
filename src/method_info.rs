@@ -1,11 +1,11 @@
 use crate::my_string;
 use crate::py_type::PyType;
-use crate::type_list::TypeList;
+use crate::arg_list::ArgList;
 
 pub struct MethodInfo {
     pub class_name: String,
     pub name: String,
-    pub type_list: Option<TypeList>,
+    pub arg_list: Option<ArgList>,
     pub return_type: Option<PyType>,
 }
 
@@ -20,14 +20,14 @@ impl MethodInfo {
             Some(token) => token,
             None => return None,
         };
-        let type_list = my_string::cut(&define, '(', ')');
+        let arg_list = my_string::cut(&define, '(', ')');
         let return_type = match my_string::cut(&define, '>', ':') {
             Some(py_type) => Some(PyType::new(&py_type)),
             None => None,
         };
         let method_info = MethodInfo {
             name: name,
-            type_list: TypeList::new(&type_list),
+            arg_list: ArgList::new(&arg_list),
             return_type: return_type,
             class_name: class_name.clone(),
         };
@@ -38,13 +38,13 @@ impl MethodInfo {
             Some(s) => format!("->{}", s.to_string()),
             None => String::from(""),
         };
-        let type_list = match &self.type_list {
+        let arg_list = match &self.arg_list {
             Some(t) => t.to_string(),
             None => String::from(""),
         };
         let define = format!(
             "    class_defineMethod(self, \"{}({}){}\", {}_{}Method);\n",
-            self.name, type_list, return_token, self.class_name, self.name
+            self.name, arg_list, return_token, self.class_name, self.name
         );
         return define;
     }
@@ -88,7 +88,7 @@ mod tests {
                 String::from("def test(test:str)->str:")
             )
             .unwrap()
-            .type_list
+            .arg_list
             .unwrap()
             .to_string(),
             String::from("test:str")
@@ -119,7 +119,7 @@ mod tests {
                 String::from("def test(test: str) ->str:")
             )
             .unwrap()
-            .type_list
+            .arg_list
             .unwrap()
             .to_string(),
             String::from("test:str")
@@ -130,7 +130,7 @@ mod tests {
                 String::from("def test(test: str, test2: int) ->str:")
             )
             .unwrap()
-            .type_list
+            .arg_list
             .unwrap()
             .to_string(),
             String::from("test:str,test2:int")
@@ -160,7 +160,7 @@ mod tests {
         );
     }
     #[test]
-    fn test_get_define_no_return_no_type_list() {
+    fn test_get_define_no_return_no_arg_list() {
         let method_info =
             MethodInfo::new(&String::from("Test"), String::from("def test():")).unwrap();
         let define = method_info.get_define();

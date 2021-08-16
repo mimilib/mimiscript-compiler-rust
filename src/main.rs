@@ -5,7 +5,7 @@ mod my_string;
 mod object_info;
 mod compiler;
 mod py_type;
-mod type_list;
+mod arg_list;
 use class_info::*;
 use import_info::*;
 use method_info::*;

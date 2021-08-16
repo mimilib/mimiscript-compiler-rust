@@ -113,7 +113,7 @@ mod tests {
                 .get("test")
                 .as_ref()
                 .unwrap()
-                .type_list
+                .arg_list
                 .as_ref()
                 .unwrap()
                 .to_string(),
