@@ -19,6 +19,7 @@ impl ArgList {
         };
         let arg_list = ArgList {
             contains: contains.clone(),
+            arg_list: HashMap::new(),
         };
         return Some(arg_list);
     }
