@@ -1,11 +1,11 @@
 use crate::my_string;
 use crate::py_arg::PyArg;
 use crate::py_type::PyType;
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 use std::collections::*;
 pub struct ArgList {
     py_arg_list: String,
-    list: HashMap<String, PyArg>,
+    list: BTreeMap<String, PyArg>,
 }
 
 impl ArgList {
@@ -19,7 +19,7 @@ impl ArgList {
         };
         let mut arg_list = ArgList {
             py_arg_list: py_arg_list.clone(),
-            list: HashMap::new(),
+            list: BTreeMap::new(),
         };
         let py_arg_list = py_arg_list.replace(" ", "");
         let py_arg_list: Vec<&str> = py_arg_list.split(",").collect();
@@ -63,6 +63,6 @@ mod tests {
     fn test_arg_list() {
         let arg_list = ArgList::new(&Some(String::from("arg1:str, arg2:int, arg3:FILE"))).unwrap();
         let arg_list_in_c = arg_list.to_c().unwrap();
-        assert_eq! {arg_list_in_c,"int arg2, FILE * arg3, char * arg1"};
+        assert_eq! {arg_list_in_c,"char * arg1, int arg2, FILE * arg3"};
     }
 }

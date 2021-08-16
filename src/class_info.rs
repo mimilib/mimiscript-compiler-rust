@@ -2,13 +2,13 @@ use crate::import_info::ImportInfo;
 use crate::method_info::MethodInfo;
 use crate::my_string;
 use crate::object_info::ObjectInfo;
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 pub struct ClassInfo {
     pub this_class_name: String,
     pub super_class_name: String,
-    pub method_list: HashMap<String, MethodInfo>,
-    pub object_list: HashMap<String, ObjectInfo>,
-    pub import_list: HashMap<String, ImportInfo>,
+    pub method_list: BTreeMap<String, MethodInfo>,
+    pub object_list: BTreeMap<String, ObjectInfo>,
+    pub import_list: BTreeMap<String, ImportInfo>,
 }
 
 impl ClassInfo {
@@ -25,9 +25,9 @@ impl ClassInfo {
         let new_class_info = ClassInfo {
             this_class_name: this_calss_name,
             super_class_name: super_class_name,
-            method_list: HashMap::new(),
-            object_list: HashMap::new(),
-            import_list: HashMap::new(),
+            method_list: BTreeMap::new(),
+            object_list: BTreeMap::new(),
+            import_list: BTreeMap::new(),
         };
         return Some(new_class_info);
     }

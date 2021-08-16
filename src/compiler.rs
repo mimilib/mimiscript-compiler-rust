@@ -1,7 +1,7 @@
 use crate::class_info::ClassInfo;
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 pub struct Compiler {
-    pub class_list: HashMap<String, ClassInfo>,
+    pub class_list: BTreeMap<String, ClassInfo>,
     pub class_now_name: Option<String>,
 }
 
@@ -65,7 +65,7 @@ mod tests {
     fn test_analyze() {
         let compiler = Compiler {
             class_now_name: None,
-            class_list: HashMap::new(),
+            class_list: BTreeMap::new(),
         };
         let compiler =
             Compiler::analyze_line(compiler, String::from("class Test(SuperTest):")).unwrap();
