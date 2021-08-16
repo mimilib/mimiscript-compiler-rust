@@ -53,6 +53,17 @@ impl ArgList {
         }
         return arg_list_in_c;
     }
+    pub fn call_arg_list(&self) -> String {
+        let mut call_arg_list = "".to_string();
+        for (i, (_, py_arg)) in self.list.iter().enumerate() {
+            let arg_name = py_arg.name();
+            call_arg_list.push_str(&arg_name);
+            if i < self.list.len() - 1 {
+                call_arg_list.push_str(", ");
+            }
+        }
+        return call_arg_list;
+    }
 }
 
 #[cfg(test)]
@@ -61,9 +72,12 @@ mod tests {
 
     #[test]
     fn test_arg_list() {
-        let arg_list = ArgList::new(&Some(String::from("arg1: str, arg2: int, arg3: FILE"))).unwrap();
+        let arg_list =
+            ArgList::new(&Some(String::from("arg1: str, arg2: int, arg3: FILE"))).unwrap();
         let arg_list_in_c = arg_list.to_c();
+        let call_arg_list = arg_list.call_arg_list();
         assert_eq! {arg_list_in_c,"char * arg1, int arg2, FILE * arg3"};
+        assert_eq! {call_arg_list,"arg1, arg2, arg3"};
     }
     #[test]
     fn test_arg_list_one_arg() {
