@@ -6,6 +6,7 @@ mod object_info;
 mod compiler;
 mod py_type;
 mod arg_list;
+mod py_arg;
 use class_info::*;
 use import_info::*;
 use method_info::*;

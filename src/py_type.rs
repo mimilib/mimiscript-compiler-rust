@@ -3,7 +3,7 @@ pub struct PyType {
 }
 
 impl PyType {
-    pub fn to_c_type(self) -> String {
+    pub fn to_c_type(&self) -> String {
         if self.type_name == "int" {
             return "int".to_string();
         }
@@ -29,7 +29,7 @@ impl PyType {
             type_name: type_name.clone(),
         };
     }
-    fn get_return_fun_name(&self) -> String {
+    pub fn return_fun_name(&self) -> String {
         if self.type_name == "int" {
             return "method_returnInt".to_string();
         }
@@ -43,5 +43,35 @@ impl PyType {
             return "method_returnStr".to_string();
         }
         return "method_returnPtr".to_string();
+    }
+    pub fn set_fun_name(&self) -> String {
+        if self.type_name == "int" {
+            return "args_setInt".to_string();
+        }
+        if self.type_name == "float" {
+            return "args_setFloat".to_string();
+        }
+        if self.type_name == "pointer" {
+            return "args_setPtr".to_string();
+        }
+        if self.type_name == "str" {
+            return "args_setStr".to_string();
+        }
+        return "args_setPtr".to_string();
+    }
+    pub fn get_fun_name(&self) -> String {
+        if self.type_name == "int" {
+            return "args_getInt".to_string();
+        }
+        if self.type_name == "float" {
+            return "args_getFloat".to_string();
+        }
+        if self.type_name == "pointer" {
+            return "args_getPtr".to_string();
+        }
+        if self.type_name == "str" {
+            return "args_getStr".to_string();
+        }
+        return "args_getPtr".to_string();
     }
 }
