@@ -4,13 +4,13 @@ use crate::py_arg::PyArg;
 use std::collections::HashMap;
 use std::collections::*;
 pub struct ArgList {
-    contains: String,
+    py_arg_list: String,
     arg_list: HashMap<String, PyArg>,
 }
 
 impl ArgList {
     pub fn to_string(&self) -> String {
-        return self.contains.clone();
+        return self.py_arg_list.clone();
     }
     pub fn new(contains: &Option<String>) -> Option<ArgList> {
         let contains = match contains {
@@ -18,7 +18,7 @@ impl ArgList {
             None => return None,
         };
         let arg_list = ArgList {
-            contains: contains.clone(),
+            py_arg_list: contains.clone(),
             arg_list: HashMap::new(),
         };
         return Some(arg_list);
