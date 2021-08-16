@@ -39,7 +39,7 @@ impl ArgList {
         }
         return Some(arg_list);
     }
-    pub fn to_c(&self) -> Option<String> {
+    pub fn to_c(&self) -> String {
         let mut arg_list_in_c = String::from("");
         for (i, (_, py_arg)) in self.list.iter().enumerate() {
             let arg_name = py_arg.name();
@@ -51,7 +51,7 @@ impl ArgList {
                 arg_list_in_c.push_str(", ");
             }
         }
-        return Some(arg_list_in_c);
+        return arg_list_in_c;
     }
 }
 
@@ -61,8 +61,14 @@ mod tests {
 
     #[test]
     fn test_arg_list() {
-        let arg_list = ArgList::new(&Some(String::from("arg1:str, arg2:int, arg3:FILE"))).unwrap();
-        let arg_list_in_c = arg_list.to_c().unwrap();
+        let arg_list = ArgList::new(&Some(String::from("arg1: str, arg2: int, arg3: FILE"))).unwrap();
+        let arg_list_in_c = arg_list.to_c();
         assert_eq! {arg_list_in_c,"char * arg1, int arg2, FILE * arg3"};
+    }
+    #[test]
+    fn test_arg_list_one_arg() {
+        let arg_list = ArgList::new(&Some(String::from("argtest: str"))).unwrap();
+        let arg_list_in_c = arg_list.to_c();
+        assert_eq! {arg_list_in_c,"char * argtest"};
     }
 }

@@ -1,6 +1,6 @@
+use crate::arg_list::ArgList;
 use crate::my_string;
 use crate::py_type::PyType;
-use crate::arg_list::ArgList;
 
 pub struct MethodInfo {
     pub class_name: String,
@@ -48,10 +48,24 @@ impl MethodInfo {
         );
         return define;
     }
-    pub fn get_method_fun_name(&self) -> String {
+    pub fn method_fun_name(&self) -> String {
         return format!(
             "void {}_{}Method(MimiObj *self, Args *args){{\n",
             self.class_name, self.name
+        );
+    }
+    pub fn local_method_declear(&self) -> String {
+        let return_type_in_c = match self.return_type.as_ref() {
+            Some(x) => x.to_c_type(),
+            None => String::from("void"),
+        };
+        let arg_list_in_c = match self.arg_list.as_ref() {
+            Some(x) => x.to_c(),
+            None => String::from(""),
+        };
+        return format!(
+            "{} {}_{}({});\n",
+            return_type_in_c, self.class_name, self.name, arg_list_in_c,
         );
     }
 }
@@ -59,6 +73,16 @@ impl MethodInfo {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_get_local_declear() {
+        let method_info = MethodInfo::new(
+            &String::from("Test"),
+            String::from("def test(test:str, test2:int)->str:"),
+        );
+        let define = method_info.unwrap().local_method_declear();
+        assert_eq!(define, String::from("char * Test_test(char * test, int test2);\n"));
+    }
 
     #[test]
     fn test_analize() {
@@ -164,7 +188,7 @@ mod tests {
         let method_info =
             MethodInfo::new(&String::from("Test"), String::from("def test():")).unwrap();
         let define = method_info.get_define();
-        let method_fun_name = method_info.get_method_fun_name();
+        let method_fun_name = method_info.method_fun_name();
         assert_eq!(
             define,
             String::from("    class_defineMethod(self, \"test()\", Test_testMethod);\n")
