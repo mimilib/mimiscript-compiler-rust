@@ -1,8 +1,11 @@
 use crate::my_string;
 use crate::py_type::PyType;
+use crate::py_arg::PyArg;
+use std::collections::HashMap;
 use std::collections::*;
 pub struct ArgList {
     contains: String,
+    arg_list: HashMap<String, PyArg>,
 }
 
 impl ArgList {
