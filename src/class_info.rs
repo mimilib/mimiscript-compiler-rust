@@ -99,6 +99,7 @@ mod tests {
             class_info
                 .method_list
                 .get("test")
+                .as_ref()
                 .unwrap()
                 .return_type
                 .as_ref()
@@ -110,10 +111,12 @@ mod tests {
             class_info
                 .method_list
                 .get("test")
+                .as_ref()
                 .unwrap()
                 .type_list
-                .clone()
-                .unwrap(),
+                .as_ref()
+                .unwrap()
+                .to_string(),
             "data:str"
         );
     }

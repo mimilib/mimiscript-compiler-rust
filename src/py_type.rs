@@ -1,4 +1,3 @@
-
 pub struct PyType {
     type_name: String,
 }
@@ -29,5 +28,20 @@ impl PyType {
         return PyType {
             type_name: type_name.clone(),
         };
+    }
+    fn get_return_fun_name(&self) -> String {
+        if self.type_name == "int" {
+            return "method_returnInt".to_string();
+        }
+        if self.type_name == "float" {
+            return "method_returnFloat".to_string();
+        }
+        if self.type_name == "pointer" {
+            return "method_returnPtr".to_string();
+        }
+        if self.type_name == "str" {
+            return "method_returnStr".to_string();
+        }
+        return "method_returnPtr".to_string();
     }
 }

@@ -1,13 +1,13 @@
 use crate::my_string;
 use crate::py_type::PyType;
+use crate::type_list::TypeList;
 
 pub struct MethodInfo {
     pub class_name: String,
     pub name: String,
-    pub type_list: Option<String>,
+    pub type_list: Option<TypeList>,
     pub return_type: Option<PyType>,
 }
-
 
 impl MethodInfo {
     pub fn new(class_name: &String, input_define: String) -> Option<MethodInfo> {
@@ -27,7 +27,7 @@ impl MethodInfo {
         };
         let method_info = MethodInfo {
             name: name,
-            type_list: type_list,
+            type_list: TypeList::new(&type_list),
             return_type: return_type,
             class_name: class_name.clone(),
         };
@@ -39,7 +39,7 @@ impl MethodInfo {
             None => String::from(""),
         };
         let type_list = match &self.type_list {
-            Some(t) => t.clone(),
+            Some(t) => t.to_string(),
             None => String::from(""),
         };
         let define = format!(
@@ -53,26 +53,6 @@ impl MethodInfo {
             "void {}_{}Method(MimiObj *self, Args *args){{\n",
             self.class_name, self.name
         );
-    }
-    fn get_return_fun_name(&self) -> Option<String> {
-        match &self.return_type {
-            Some(return_type) => {
-                if return_type.to_string() == "int" {
-                    return Some("method_returnInt".to_string());
-                }
-                if return_type.to_string() == "float" {
-                    return Some("method_returnFloat".to_string());
-                }
-                if return_type.to_string() == "pointer" {
-                    return Some("method_returnPtr".to_string());
-                }
-                if return_type.to_string() == "str" {
-                    return Some("method_returnStr".to_string());
-                }
-                return Some("method_returnPtr".to_string());
-            }
-            None => return None,
-        }
     }
 }
 
@@ -109,7 +89,8 @@ mod tests {
             )
             .unwrap()
             .type_list
-            .unwrap(),
+            .unwrap()
+            .to_string(),
             String::from("test:str")
         );
         assert_eq!(
@@ -139,14 +120,9 @@ mod tests {
             )
             .unwrap()
             .type_list
-            .unwrap(),
+            .unwrap()
+            .to_string(),
             String::from("test:str")
-        );
-        assert_eq!(
-            MethodInfo::new(&String::from("Test"), String::from("def test() ->str:"))
-                .unwrap()
-                .type_list,
-            None
         );
         assert_eq!(
             MethodInfo::new(
@@ -193,6 +169,9 @@ mod tests {
             define,
             String::from("    class_defineMethod(self, \"test()\", Test_testMethod);\n")
         );
-        assert_eq!(method_fun_name, String::from("void Test_testMethod(MimiObj *self, Args *args){\n"));
+        assert_eq!(
+            method_fun_name,
+            String::from("void Test_testMethod(MimiObj *self, Args *args){\n")
+        );
     }
 }
