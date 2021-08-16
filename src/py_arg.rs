@@ -8,7 +8,7 @@ pub struct PyArg {
 
 impl PyArg {
     pub fn new(name: &String, type_name: &String) -> PyArg {
-        let py_arg = PyArg{
+        let py_arg = PyArg {
             name: name.clone(),
             py_type: PyType::new(type_name),
         };
@@ -29,5 +29,28 @@ impl PyArg {
         c_define.push_str(" ");
         c_define.push_str(&self.name());
         return c_define;
+    }
+    pub fn get_arg_to_local(&self) -> String {
+        return format!(
+            "    {} {} = {}(args, \"{}\");\n",
+            self.c_type(),
+            self.name(),
+            self.py_type.get_fn(),
+            self.name()
+        );
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_arg_to_local() {
+        let arg = PyArg::new(&"arg".to_string(), &"str".to_string());
+        assert_eq!(
+            arg.get_arg_to_local(),
+            "    char * arg = args_getStr(args, \"arg\");\n"
+        );
     }
 }
