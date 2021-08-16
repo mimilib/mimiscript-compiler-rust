@@ -5,21 +5,21 @@ use std::collections::HashMap;
 use std::collections::*;
 pub struct ArgList {
     py_arg_list: String,
-    arg_list: HashMap<String, PyArg>,
+    list: HashMap<String, PyArg>,
 }
 
 impl ArgList {
     pub fn to_string(&self) -> String {
         return self.py_arg_list.clone();
     }
-    pub fn new(contains: &Option<String>) -> Option<ArgList> {
-        let contains = match contains {
-            Some(contains) => contains,
+    pub fn new(py_arg_list: &Option<String>) -> Option<ArgList> {
+        let py_arg_list = match py_arg_list {
+            Some(x) => x,
             None => return None,
         };
         let arg_list = ArgList {
-            py_arg_list: contains.clone(),
-            arg_list: HashMap::new(),
+            py_arg_list: py_arg_list.clone(),
+            list: HashMap::new(),
         };
         return Some(arg_list);
     }
