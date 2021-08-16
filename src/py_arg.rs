@@ -7,6 +7,13 @@ pub struct PyArg {
 }
 
 impl PyArg {
+    pub fn new(name: &String, type_name: &String) -> PyArg {
+        let py_arg = PyArg{
+            name: name.clone(),
+            py_type: PyType::new(type_name),
+        };
+        return py_arg;
+    }
     pub fn name(&self) -> String {
         return self.name.clone();
     }
