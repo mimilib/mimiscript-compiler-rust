@@ -3,6 +3,7 @@ use crate::py_arg::PyArg;
 use crate::py_type::PyType;
 use std::collections::BTreeMap;
 use std::collections::*;
+#[derive(Debug)]
 pub struct ArgList {
     py_arg_list: String,
     list: BTreeMap<String, PyArg>,

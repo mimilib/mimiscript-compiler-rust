@@ -3,6 +3,7 @@ use crate::method_info::MethodInfo;
 use crate::my_string;
 use crate::object_info::ObjectInfo;
 use std::collections::BTreeMap;
+#[derive(Debug)]
 pub struct ClassInfo {
     pub this_class_name: String,
     pub super_class_name: String,

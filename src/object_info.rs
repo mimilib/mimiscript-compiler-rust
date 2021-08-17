@@ -1,4 +1,5 @@
 use crate::my_string;
+#[derive(Debug)]
 pub struct ObjectInfo {
     pub class_name: String,
     pub name: String,

@@ -1,5 +1,5 @@
 use crate::my_string;
-
+#[derive(Debug)]
 pub struct ImportInfo {
     pub class_name: String,
     pub import_class_name: String,

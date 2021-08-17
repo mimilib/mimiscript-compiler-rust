@@ -2,6 +2,7 @@ use crate::arg_list::ArgList;
 use crate::my_string;
 use crate::py_type::PyType;
 
+#[derive(Debug)]
 pub struct MethodInfo {
     pub class_name: String,
     pub name: String,

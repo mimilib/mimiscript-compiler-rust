@@ -1,6 +1,7 @@
 use crate::my_string;
 use crate::py_type::PyType;
 
+#[derive(Debug)]
 pub struct PyArg {
     py_type: PyType,
     name: String,
