@@ -68,6 +68,36 @@ impl MethodInfo {
             return_type_in_c, self.class_name, self.name, arg_list_in_c,
         );
     }
+    pub fn method_fun_impl(&self) -> String {
+        let mut method_fun_impl = "".to_string();
+        let method_fun_name = self.method_fun_name();
+        let get_local_args = match &self.arg_list {
+            Some(x) => x.get_local_args(),
+            None => "".to_string(),
+        };
+        let return_impl = match &self.return_type {
+            Some(x) => format!("    {}(args, res);\n", x.return_fn()),
+            None => "".to_string(),
+        };
+        let return_type_in_c = match &self.return_type {
+            Some(x) => x.to_c_type(),
+            None => "void".to_string(),
+        };
+        let call_arg_list = match &self.arg_list {
+            Some(x) => format!(", {}", x.call_arg_list()),
+            None => "".to_string(),
+        };
+        let call_method = format!(
+            "    {} res = {}_{}Method(self{});\n",
+            return_type_in_c, self.class_name, self.name, call_arg_list
+        );
+        method_fun_impl.push_str(&method_fun_name);
+        method_fun_impl.push_str(&get_local_args);
+        method_fun_impl.push_str(&call_method);
+        method_fun_impl.push_str(&return_impl);
+        method_fun_impl.push_str("}\n\n");
+        return method_fun_impl;
+    }
 }
 
 #[cfg(test)]
@@ -80,8 +110,13 @@ mod tests {
             &String::from("Test"),
             String::from("def test(test:str, test2:int)->str:"),
         );
-        let define = method_info.unwrap().local_method_declear();
-        assert_eq!(define, String::from("char * Test_test(char * test, int test2);\n"));
+        let define = method_info.as_ref().unwrap().local_method_declear();
+        let method_fun_impl = method_info.as_ref().unwrap().method_fun_impl();
+        assert_eq!(define, "char * Test_test(char * test, int test2);\n");
+        assert_eq!(
+            method_fun_impl,
+           "void Test_testMethod(MimiObj *self, Args *args){\n    char * test = args_getStr(args, \"test\");\n    int test2 = args_getInt(args, \"test2\");\n    char * res = Test_testMethod(self, test, test2);\n    method_returnStr(args, res);\n}\n\n" 
+        );
     }
 
     #[test]

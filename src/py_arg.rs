@@ -30,7 +30,7 @@ impl PyArg {
         c_define.push_str(&self.name());
         return c_define;
     }
-    pub fn get_arg_to_local(&self) -> String {
+    pub fn get_local_arg(&self) -> String {
         return format!(
             "    {} {} = {}(args, \"{}\");\n",
             self.c_type(),
@@ -49,7 +49,7 @@ mod tests {
     fn test_get_arg_to_local() {
         let arg = PyArg::new(&"arg".to_string(), &"str".to_string());
         assert_eq!(
-            arg.get_arg_to_local(),
+            arg.get_local_arg(),
             "    char * arg = args_getStr(args, \"arg\");\n"
         );
     }

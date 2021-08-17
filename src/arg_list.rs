@@ -64,6 +64,13 @@ impl ArgList {
         }
         return call_arg_list;
     }
+    pub fn get_local_args(&self) -> String {
+        let mut get_local_args = "".to_string();
+        for (_, py_arg) in self.list.iter() {
+            get_local_args.push_str(&py_arg.get_local_arg());
+        }
+        return get_local_args;
+    }
 }
 
 #[cfg(test)]
@@ -76,8 +83,10 @@ mod tests {
             ArgList::new(&Some(String::from("arg1: str, arg2: int, arg3: FILE"))).unwrap();
         let arg_list_in_c = arg_list.to_c();
         let call_arg_list = arg_list.call_arg_list();
+        let get_local_args = arg_list.get_local_args();
         assert_eq! {arg_list_in_c,"char * arg1, int arg2, FILE * arg3"};
         assert_eq! {call_arg_list,"arg1, arg2, arg3"};
+        assert_eq! {get_local_args,"    char * arg1 = args_getStr(args, \"arg1\");\n    int arg2 = args_getInt(args, \"arg2\");\n    FILE * arg3 = args_getPtr(args, \"arg3\");\n"};
     }
     #[test]
     fn test_arg_list_one_arg() {
