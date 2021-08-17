@@ -66,6 +66,24 @@ impl ClassInfo {
             self.this_class_name, self.super_class_name
         );
     }
+
+    pub fn include(&self) -> String {
+        let mut include = String::new();
+        include.push_str(&format!("#include \"{}.h\"\n", self.super_class_name));
+        for (_, import_info) in self.import_list.iter() {
+            include.push_str(&format!(
+                "#include \"{}.h\"\n",
+                import_info.import_class_name
+            ));
+        }
+        for (_, object_info) in self.object_list.iter(){
+            include.push_str(&format!(
+                "#include \"{}.h\"\n",
+                object_info.import_class_name
+            ));
+        }
+        return include;
+    }
 }
 
 #[cfg(test)]

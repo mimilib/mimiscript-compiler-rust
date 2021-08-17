@@ -1,4 +1,4 @@
-class PyObj(SysObj):
+class PyObj(BaseObj):
 
     def importClass(className: str, fp: FILE):
         pass
@@ -36,7 +36,7 @@ class PyMethod (SysObj):
 
 
 class Compiler(SysObj):
-    PyMethod()
+    obj = PyObj()
     PyMethod()
     PyClass()
 
