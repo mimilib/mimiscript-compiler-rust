@@ -21,7 +21,7 @@ fn main() {
         println!("{:3}|{}", i + 1, line);
         compiler = Compiler::analyze_line(compiler, line.to_string());
     }
-    let mut f = File::create("dist/compiler-info.txt").unwrap();
+    let mut compiler_info_file = File::create("dist/compiler-info.txt").unwrap();
     let compiler_info = format!("{:?}", compiler);
-    f.write(compiler_info.as_bytes()).unwrap();
+    compiler_info_file.write(compiler_info.as_bytes()).unwrap();
 }
