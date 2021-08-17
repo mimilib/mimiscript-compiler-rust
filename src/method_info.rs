@@ -49,7 +49,7 @@ impl MethodInfo {
         );
         return define;
     }
-    pub fn method_fun_name(&self) -> String {
+    pub fn method_fn_name(&self) -> String {
         return format!(
             "void {}_{}Method(MimiObj *self, Args *args){{\n",
             self.class_name, self.name
@@ -69,9 +69,9 @@ impl MethodInfo {
             return_type_in_c, self.class_name, self.name, arg_list_in_c,
         );
     }
-    pub fn method_fun_impl(&self) -> String {
-        let mut method_fun_impl = "".to_string();
-        let method_fun_name = self.method_fun_name();
+    pub fn method_fn_impl(&self) -> String {
+        let mut method_fn_impl = "".to_string();
+        let method_fn_name = self.method_fn_name();
         let get_local_args = match &self.arg_list {
             Some(x) => x.get_local_args(),
             None => "".to_string(),
@@ -92,12 +92,12 @@ impl MethodInfo {
             "    {}{}_{}(self{});\n",
             return_type_in_c, self.class_name, self.name, call_arg_list
         );
-        method_fun_impl.push_str(&method_fun_name);
-        method_fun_impl.push_str(&get_local_args);
-        method_fun_impl.push_str(&call_method);
-        method_fun_impl.push_str(&return_impl);
-        method_fun_impl.push_str("}\n\n");
-        return method_fun_impl;
+        method_fn_impl.push_str(&method_fn_name);
+        method_fn_impl.push_str(&get_local_args);
+        method_fn_impl.push_str(&call_method);
+        method_fn_impl.push_str(&return_impl);
+        method_fn_impl.push_str("}\n\n");
+        return method_fn_impl;
     }
 }
 
@@ -112,10 +112,10 @@ mod tests {
             String::from("def test(test:str, test2:int)->str:"),
         );
         let define = method_info.as_ref().unwrap().local_method_declear();
-        let method_fun_impl = method_info.as_ref().unwrap().method_fun_impl();
+        let method_fn_impl = method_info.as_ref().unwrap().method_fn_impl();
         assert_eq!(define, "char * Test_test(char * test, int test2);\n");
         assert_eq!(
-            method_fun_impl,
+            method_fn_impl,
             "void Test_testMethod(MimiObj *self, Args *args){\n    char * test = args_getStr(args, \"test\");\n    int test2 = args_getInt(args, \"test2\");\n    char * res = Test_test(self, test, test2);\n    method_returnStr(args, res);\n}\n\n"
         );
     }
@@ -224,13 +224,13 @@ mod tests {
         let method_info =
             MethodInfo::new(&String::from("Test"), String::from("def test():")).unwrap();
         let define = method_info.get_define();
-        let method_fun_name = method_info.method_fun_name();
+        let method_fn_name = method_info.method_fn_name();
         assert_eq!(
             define,
             String::from("    class_defineMethod(self, \"test()\", Test_testMethod);\n")
         );
         assert_eq!(
-            method_fun_name,
+            method_fn_name,
             String::from("void Test_testMethod(MimiObj *self, Args *args){\n")
         );
     }

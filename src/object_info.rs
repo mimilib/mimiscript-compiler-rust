@@ -23,19 +23,19 @@ impl ObjectInfo {
             import_class_name: import_class_name,
         });
     }
-    pub fn new_object_fun(&self) -> String {
-        let mut new_object_fun = String::new();
-        let import_fun = format!(
+    pub fn new_object_fn(&self) -> String {
+        let mut new_object_fn = String::new();
+        let import_fn = format!(
             "    obj_import(self, \"{}\", New_{});\n",
             self.import_class_name, self.import_class_name
         );
-        new_object_fun.push_str(&import_fun);
-        let new_fun = format!(
+        new_object_fn.push_str(&import_fn);
+        let new_fn = format!(
             "    obj_newObj(self, \"{}\", \"{}\");\n",
             self.name, self.import_class_name
         );
-        new_object_fun.push_str(&new_fun);
-        return new_object_fun;
+        new_object_fn.push_str(&new_fn);
+        return new_object_fn;
     }
 }
 

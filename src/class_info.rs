@@ -80,10 +80,10 @@ impl ClassInfo {
         return include;
     }
 
-    pub fn method_impl(&self) -> String {
+    pub fn method_api_fn(&self) -> String {
         let mut method_impl = String::new();
         for (_, method_info) in self.method_list.iter() {
-            method_impl.push_str(&method_info.method_fun_impl());
+            method_impl.push_str(&method_info.method_fn_impl());
         }
         return method_impl;
     }
@@ -94,11 +94,11 @@ impl ClassInfo {
         let derive = format!("    MimiObj *self = New_{}(args);\n", self.super_class_name);
         new_class_fn.push_str(&derive);
         for (_, import_info) in self.import_list.iter() {
-            new_class_fn.push_str(&import_info.import_fun());
+            new_class_fn.push_str(&import_info.import_fn());
         }
 
         for (_, object_info) in self.object_list.iter() {
-            new_class_fn.push_str(&object_info.new_object_fun());
+            new_class_fn.push_str(&object_info.new_object_fn());
         }
 
         for (_, method_info) in self.method_list.iter() {

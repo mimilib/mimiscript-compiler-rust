@@ -40,7 +40,7 @@ fn main() {
         f.write("#include \"MimiObj.h\"\n".as_bytes()).unwrap();
         f.write(class_info.include().as_bytes()).unwrap();
         f.write("\n".as_bytes()).unwrap();
-        f.write(class_info.method_impl().as_bytes()).unwrap();
+        f.write(class_info.method_api_fn().as_bytes()).unwrap();
         f.write(class_info.new_class_fn().as_bytes()).unwrap();
     }
 }
