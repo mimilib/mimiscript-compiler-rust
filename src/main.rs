@@ -39,7 +39,7 @@ fn main() {
         f.write(class_info.include().as_bytes()).unwrap();
         f.write("#include <stdio.h>\n".as_bytes()).unwrap();
         f.write("#include <stdlib.h>\n".as_bytes()).unwrap();
-        f.write("#include \"MimiObj.h\"\n".as_bytes()).unwrap();
+        f.write("#include \"BaseObj.h\"\n".as_bytes()).unwrap();
         f.write("\n".as_bytes()).unwrap();
         f.write(class_info.method_api_fn().as_bytes()).unwrap();
         f.write(class_info.new_class_fn().as_bytes()).unwrap();
