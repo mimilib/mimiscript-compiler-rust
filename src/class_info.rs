@@ -90,7 +90,8 @@ impl ClassInfo {
 
     pub fn new_class_fn(&self) -> String {
         let mut new_class_fn = String::new();
-        new_class_fn.push_str(&self.new_class_fn_name());
+        let new_class_fn_head = format!("{}{{\n", self.new_class_fn_name());
+        new_class_fn.push_str(&new_class_fn_head);
         let derive = format!("    MimiObj *self = New_{}(args);\n", self.super_class_name);
         new_class_fn.push_str(&derive);
         for (_, import_info) in self.import_list.iter() {
@@ -110,8 +111,16 @@ impl ClassInfo {
         return new_class_fn;
     }
 
-    fn new_class_fn_name(&self) -> String {
-        return format!("MimiObj *New_{}(Args *args){{\n", self.this_class_name);
+    pub fn new_class_fn_name(&self) -> String {
+        return format!("MimiObj *New_{}(Args *args)", self.this_class_name);
+    }
+
+    pub fn method_impl_declear(&self) -> String {
+        let mut method_fn_declear = String::new();
+        for (_, method_info) in self.method_list.iter() {
+            method_fn_declear.push_str(&method_info.method_impl_declear());
+        }
+        return method_fn_declear;
     }
 }
 

@@ -49,29 +49,29 @@ impl MethodInfo {
         );
         return define;
     }
-    pub fn method_fn_name(&self) -> String {
+    pub fn method_api_name(&self) -> String {
         return format!(
-            "void {}_{}Method(MimiObj *self, Args *args){{\n",
+            "void {}_{}Method(MimiObj *self, Args *args)",
             self.class_name, self.name
         );
     }
-    pub fn local_method_declear(&self) -> String {
+    pub fn method_impl_declear(&self) -> String {
         let return_type_in_c = match self.return_type.as_ref() {
             Some(x) => x.to_c_type(),
             None => String::from("void"),
         };
         let arg_list_in_c = match self.arg_list.as_ref() {
-            Some(x) => x.to_c(),
+            Some(x) => format!(", {}", x.to_c()),
             None => String::from(""),
         };
         return format!(
-            "{} {}_{}({});\n",
+            "{} {}_{}(MimiObj *self{});\n",
             return_type_in_c, self.class_name, self.name, arg_list_in_c,
         );
     }
     pub fn method_fn_impl(&self) -> String {
         let mut method_fn_impl = "".to_string();
-        let method_fn_name = self.method_fn_name();
+        let method_fn_name = format!("{}{{\n", self.method_api_name());
         let get_local_args = match &self.arg_list {
             Some(x) => x.get_local_args(),
             None => "".to_string(),
@@ -111,7 +111,7 @@ mod tests {
             &String::from("Test"),
             String::from("def test(test:str, test2:int)->str:"),
         );
-        let define = method_info.as_ref().unwrap().local_method_declear();
+        let define = method_info.as_ref().unwrap().method_impl_declear();
         let method_fn_impl = method_info.as_ref().unwrap().method_fn_impl();
         assert_eq!(define, "char * Test_test(char * test, int test2);\n");
         assert_eq!(
@@ -224,14 +224,14 @@ mod tests {
         let method_info =
             MethodInfo::new(&String::from("Test"), String::from("def test():")).unwrap();
         let define = method_info.get_define();
-        let method_fn_name = method_info.method_fn_name();
+        let method_fn_name = method_info.method_api_name();
         assert_eq!(
             define,
             String::from("    class_defineMethod(self, \"test()\", Test_testMethod);\n")
         );
         assert_eq!(
             method_fn_name,
-            String::from("void Test_testMethod(MimiObj *self, Args *args){\n")
+            String::from("void Test_testMethod(MimiObj *self, Args *args)")
         );
     }
 }

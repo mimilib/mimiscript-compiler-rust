@@ -12,6 +12,9 @@ class PyObj(BaseObj):
     def makeNewObj(fp: FILE):
         pass
 
+    def getInclude() -> str:
+        pass
+
 
 class PyClass(SysObj):
     def setSuper(superClassName: str):

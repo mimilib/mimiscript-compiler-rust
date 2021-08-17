@@ -60,6 +60,13 @@ fn main() {
         f.write("#include <stdio.h>\n".as_bytes()).unwrap();
         f.write("#include <stdlib.h>\n".as_bytes()).unwrap();
         f.write("#include \"MimiObj.h\"\n".as_bytes()).unwrap();
+        f.write("\n".as_bytes()).unwrap();
+        let new_class_fn_declear = format!("{};\n", class_info.new_class_fn_name());
+        f.write(new_class_fn_declear.as_bytes()).unwrap();
+        f.write("\n".as_bytes()).unwrap();
+        f.write(class_info.method_impl_declear().as_bytes())
+            .unwrap();
+        f.write("\n".as_bytes()).unwrap();
         f.write("#endif\n".as_bytes()).unwrap();
     }
 }
