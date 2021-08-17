@@ -27,20 +27,14 @@ fn main() {
     for (_, class_info) in compiler.class_list.iter() {
         let api_file_path = format!("dist/{}-api.c", class_info.this_class_name);
         let mut api_file = File::create(api_file_path).unwrap();
-        api_file
-            .write("/* ******************************** */\n".as_bytes())
-            .unwrap();
-        api_file
-            .write("/* Warning! don't modify this file! */\n".as_bytes())
-            .unwrap();
-        api_file
-            .write("/* ******************************** */\n".as_bytes())
-            .unwrap();
-        api_file
-            .write("#include \"MimiObj.h\"\n".as_bytes())
-            .unwrap();
-        api_file
-            .write(class_info.include().as_bytes())
-            .unwrap();
+        api_file.write("/* ******************************** */\n".as_bytes());
+        api_file.write("/* Warning! don't modify this file! */\n".as_bytes());
+        api_file.write("/* ******************************** */\n".as_bytes());
+        api_file.write("#include <stdio.h>\n".as_bytes());
+        api_file.write("#include <stdlib.h>\n".as_bytes());
+        api_file.write("#include \"MimiObj.h\"\n".as_bytes());
+        api_file.write(class_info.include().as_bytes());
+        api_file.write("\n".as_bytes());
+        api_file.write(class_info.method_impl().as_bytes());
     }
 }

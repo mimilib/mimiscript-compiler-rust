@@ -14,12 +14,13 @@ pub struct ClassInfo {
 
 impl ClassInfo {
     pub fn new(define: &String) -> Option<ClassInfo> {
-        let define_without_prefix = define.strip_prefix("class ").unwrap().to_string();
-        let super_class_name = match my_string::cut(&define_without_prefix, '(', ')') {
+        let define = define.strip_prefix("class ").unwrap().to_string();
+        let define = define.replace(" ", "");
+        let super_class_name = match my_string::cut(&define, '(', ')') {
             Some(s) => s,
             None => return None,
         };
-        let this_calss_name = match my_string::get_first_token(&define_without_prefix, '(') {
+        let this_calss_name = match my_string::get_first_token(&define, '(') {
             Some(s) => s,
             None => return None,
         };
@@ -76,13 +77,21 @@ impl ClassInfo {
                 import_info.import_class_name
             ));
         }
-        for (_, object_info) in self.object_list.iter(){
+        for (_, object_info) in self.object_list.iter() {
             include.push_str(&format!(
                 "#include \"{}.h\"\n",
                 object_info.import_class_name
             ));
         }
         return include;
+    }
+
+    pub fn method_impl(&self) -> String {
+        let mut method_impl = String::new();
+        for (_, method_info) in self.method_list.iter() {
+            method_impl.push_str(&method_info.method_fun_impl());
+        }
+        return method_impl;
     }
 }
 
