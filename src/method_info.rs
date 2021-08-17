@@ -81,15 +81,15 @@ impl MethodInfo {
             None => "".to_string(),
         };
         let return_type_in_c = match &self.return_type {
-            Some(x) => x.to_c_type(),
-            None => "void".to_string(),
+            Some(x) => format!("{} res = ", x.to_c_type()),
+            None => "".to_string(),
         };
         let call_arg_list = match &self.arg_list {
             Some(x) => format!(", {}", x.call_arg_list()),
             None => "".to_string(),
         };
         let call_method = format!(
-            "    {} res = {}_{}Method(self{});\n",
+            "    {}{}_{}(self{});\n",
             return_type_in_c, self.class_name, self.name, call_arg_list
         );
         method_fun_impl.push_str(&method_fun_name);
