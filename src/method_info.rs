@@ -113,7 +113,7 @@ mod tests {
         );
         let define = method_info.as_ref().unwrap().method_impl_declear();
         let method_fn_impl = method_info.as_ref().unwrap().method_fn_impl();
-        assert_eq!(define, "char * Test_test(char * test, int test2);\n");
+        assert_eq!(define, "char * Test_test(MimiObj *self, char * test, int test2);\n");
         assert_eq!(
             method_fn_impl,
             "void Test_testMethod(MimiObj *self, Args *args){\n    char * test = args_getStr(args, \"test\");\n    int test2 = args_getInt(args, \"test2\");\n    char * res = Test_test(self, test, test2);\n    method_returnStr(args, res);\n}\n\n"

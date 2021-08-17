@@ -2,13 +2,17 @@ use crate::class_info::ClassInfo;
 use std::collections::BTreeMap;
 #[derive(Debug)]
 pub struct Compiler {
+    pub dist_path: String,
+    pub source_path: String,
     pub class_list: BTreeMap<String, ClassInfo>,
     pub class_now_name: Option<String>,
 }
 
 impl Compiler {
-    pub fn new() -> Compiler {
+    pub fn new(source_path: String, dist_path: String) -> Compiler {
         let compiler = Compiler {
+            dist_path: dist_path.clone(),
+            source_path: source_path.clone(),
             class_now_name: None,
             class_list: BTreeMap::new(),
         };
@@ -71,10 +75,7 @@ mod tests {
     use super::*;
     #[test]
     fn test_analyze() {
-        let compiler = Compiler {
-            class_now_name: None,
-            class_list: BTreeMap::new(),
-        };
+        let compiler = Compiler::new(String::from(""), String::from(""));
         let compiler = Compiler::analyze_line(compiler, String::from("class Test(SuperTest):"));
         let compiler = Compiler::analyze_line(compiler, String::from("    def test()"));
         let compiler = Compiler::analyze_line(compiler, String::from("    testObj = TestObj()"));

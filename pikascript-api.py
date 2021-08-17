@@ -46,8 +46,8 @@ class Compiler(SysObj):
     def build(pythonApiPath: str, outputPath: str) -> int:
         pass
 
-    def analizeFile(pythonApiPath: str) -> int:
+    def analyzeFile(pythonApiPath: str) -> int:
         pass
 
-    def analizeLine(line: str) -> int:
+    def analyzeLine(line: str) -> int:
         pass

@@ -12,22 +12,23 @@ use std::fs::File;
 use std::io::prelude::*;
 
 fn main() {
-    let mut file = File::open("pikascript-api.py").unwrap();
+    let mut compiler = Compiler::new(String::from(""), String::from("dist/"));
+    let mut file = File::open(format!("{}pikascript-api.py", compiler.source_path)).unwrap();
     let mut picascript_api = String::new();
     file.read_to_string(&mut picascript_api).unwrap();
     let lines: Vec<&str> = picascript_api.split('\n').collect();
-    let mut compiler = Compiler::new();
     /* analyze each line of pikascript-api.py */
     for line in lines.iter() {
         compiler = Compiler::analyze_line(compiler, line.to_string());
     }
     /* write to compiler-info about the info */
-    let mut compiler_info_file = File::create("dist/compiler-info.txt").unwrap();
+    let mut compiler_info_file =
+        File::create(format!("{}compiler-info.txt", compiler.dist_path)).unwrap();
     let compiler_info = format!("{:?}", compiler);
     compiler_info_file.write(compiler_info.as_bytes()).unwrap();
     /* make the api.c file for each python class */
     for (_, class_info) in compiler.class_list.iter() {
-        let api_file_path = format!("dist/{}-api.c", class_info.this_class_name);
+        let api_file_path = format!("{}{}-api.c", compiler.dist_path, class_info.this_class_name);
         let mut f = File::create(api_file_path).unwrap();
         f.write("/* ******************************** */\n".as_bytes())
             .unwrap();
@@ -45,7 +46,7 @@ fn main() {
     }
     /* make the .h file for each python class */
     for (_, class_info) in compiler.class_list.iter() {
-        let api_file_path = format!("dist/{}.h", class_info.this_class_name);
+        let api_file_path = format!("{}{}.h", compiler.dist_path, class_info.this_class_name);
         let mut f = File::create(api_file_path).unwrap();
         f.write("/* ******************************** */\n".as_bytes())
             .unwrap();
