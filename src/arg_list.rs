@@ -22,7 +22,7 @@ impl ArgList {
         };
         let py_arg_list = py_arg_list.replace(" ", "");
         let py_arg_list: Vec<&str> = py_arg_list.split(",").collect();
-        for (arg_define) in py_arg_list.iter() {
+        for arg_define in py_arg_list.iter() {
             let arg_name = match my_string::get_first_token(&arg_define.to_string(), ':') {
                 Some(name) => name,
                 None => return None,
