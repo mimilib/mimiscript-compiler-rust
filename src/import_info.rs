@@ -17,6 +17,12 @@ impl ImportInfo {
             import_class_name: import_class_name,
         });
     }
+    pub fn import_fun(&self) -> String {
+        return format!(
+            "    obj_import(self, \"{}\", New_{});\n",
+            self.import_class_name, self.import_class_name
+        );
+    }
 }
 
 #[cfg(test)]

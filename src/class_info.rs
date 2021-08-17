@@ -61,15 +61,9 @@ impl ClassInfo {
             .or_insert(object_info);
     }
 
-    pub fn print_info(&self) -> String {
-        return format!(
-            "[info] this class name: {}, super class name: {}",
-            self.this_class_name, self.super_class_name
-        );
-    }
-
     pub fn include(&self) -> String {
         let mut include = String::new();
+        include.push_str(&format!("#include \"{}.h\"\n", self.this_class_name));
         include.push_str(&format!("#include \"{}.h\"\n", self.super_class_name));
         for (_, import_info) in self.import_list.iter() {
             include.push_str(&format!(
@@ -92,6 +86,32 @@ impl ClassInfo {
             method_impl.push_str(&method_info.method_fun_impl());
         }
         return method_impl;
+    }
+
+    pub fn new_class_fn(&self) -> String {
+        let mut new_class_fn = String::new();
+        new_class_fn.push_str(&self.new_class_fn_name());
+        let derive = format!("    MimiObj *self = New_{}(args);\n", self.super_class_name);
+        new_class_fn.push_str(&derive);
+        for (_, import_info) in self.import_list.iter() {
+            new_class_fn.push_str(&import_info.import_fun());
+        }
+
+        for (_, object_info) in self.object_list.iter() {
+            new_class_fn.push_str(&object_info.new_object_fun());
+        }
+
+        for (_, method_info) in self.method_list.iter() {
+            new_class_fn.push_str(&method_info.get_define());
+        }
+
+        new_class_fn.push_str("    return self;\n");
+        new_class_fn.push_str("}\n");
+        return new_class_fn;
+    }
+
+    fn new_class_fn_name(&self) -> String {
+        return format!("MimiObj *New_{}(Args *args){{\n", self.this_class_name);
     }
 }
 

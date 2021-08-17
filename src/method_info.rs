@@ -116,7 +116,7 @@ mod tests {
         assert_eq!(define, "char * Test_test(char * test, int test2);\n");
         assert_eq!(
             method_fun_impl,
-           "void Test_testMethod(MimiObj *self, Args *args){\n    char * test = args_getStr(args, \"test\");\n    int test2 = args_getInt(args, \"test2\");\n    char * res = Test_testMethod(self, test, test2);\n    method_returnStr(args, res);\n}\n\n" 
+            "void Test_testMethod(MimiObj *self, Args *args){\n    char * test = args_getStr(args, \"test\");\n    int test2 = args_getInt(args, \"test2\");\n    char * res = Test_test(self, test, test2);\n    method_returnStr(args, res);\n}\n\n"
         );
     }
 
