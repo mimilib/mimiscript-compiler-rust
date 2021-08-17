@@ -1,4 +1,3 @@
-use crate::my_string;
 use crate::py_type::PyType;
 
 #[derive(Debug)]

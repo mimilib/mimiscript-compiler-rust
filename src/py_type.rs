@@ -1,4 +1,3 @@
-
 #[derive(Debug)]
 pub struct PyType {
     type_name: String,
