@@ -43,4 +43,23 @@ fn main() {
         f.write(class_info.method_api_fn().as_bytes()).unwrap();
         f.write(class_info.new_class_fn().as_bytes()).unwrap();
     }
+    /* make the .h file for each python class */
+    for (_, class_info) in compiler.class_list.iter() {
+        let api_file_path = format!("dist/{}.h", class_info.this_class_name);
+        let mut f = File::create(api_file_path).unwrap();
+        f.write("/* ******************************** */\n".as_bytes())
+            .unwrap();
+        f.write("/* Warning! Don't modify this file! */\n".as_bytes())
+            .unwrap();
+        f.write("/* ******************************** */\n".as_bytes())
+            .unwrap();
+        f.write(format!("#ifndef __{}__H\n", class_info.this_class_name).as_bytes())
+            .unwrap();
+        f.write(format!("#define __{}__H\n", class_info.this_class_name).as_bytes())
+            .unwrap();
+        f.write("#include <stdio.h>\n".as_bytes()).unwrap();
+        f.write("#include <stdlib.h>\n".as_bytes()).unwrap();
+        f.write("#include \"MimiObj.h\"\n".as_bytes()).unwrap();
+        f.write("#endif\n".as_bytes()).unwrap();
+    }
 }
