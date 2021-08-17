@@ -36,7 +36,6 @@ class PyMethod (SysObj):
 
 
 class Compiler(SysObj):
-
     PyMethod()
     PyMethod()
     PyClass()
