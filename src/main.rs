@@ -12,7 +12,7 @@ use std::fs::File;
 use std::io::prelude::*;
 
 fn main() {
-    let mut compiler = Compiler::new(String::from(""), String::from("pikascript-api/"));
+    let mut compiler = Compiler::new(String::from("pikascript/"), String::from("pikascript/pikascript-api/"));
     let mut file = File::open(format!("{}pikascript-api.py", compiler.source_path)).unwrap();
     let mut picascript_api = String::new();
     file.read_to_string(&mut picascript_api).unwrap();
