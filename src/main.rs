@@ -13,8 +13,8 @@ use std::io::prelude::*;
 
 fn main() {
     let mut compiler = Compiler::new(
-        String::from("pikascript/"),
-        String::from("pikascript/pikascript-api/"),
+        String::from(""),
+        String::from("pikascript-api/"),
     );
     compiler = Compiler::analyze_file(compiler, String::from("pikascript-api"));
     /* write to compiler-info about the info */

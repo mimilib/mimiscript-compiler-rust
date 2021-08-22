@@ -83,9 +83,9 @@ mod tests {
         let arg_list_in_c = arg_list.to_c();
         let call_arg_list = arg_list.call_arg_list();
         let get_local_args = arg_list.get_local_args();
-        assert_eq! {arg_list_in_c,"char * arg1, int arg2, FILE * arg3"};
+        assert_eq! {arg_list_in_c,"char * arg1, int arg2, void * arg3"};
         assert_eq! {call_arg_list,"arg1, arg2, arg3"};
-        assert_eq! {get_local_args,"    char * arg1 = args_getStr(args, \"arg1\");\n    int arg2 = args_getInt(args, \"arg2\");\n    FILE * arg3 = args_getPtr(args, \"arg3\");\n"};
+        assert_eq! {get_local_args,"    char * arg1 = args_getStr(args, \"arg1\");\n    int arg2 = args_getInt(args, \"arg2\");\n    void * arg3 = args_getPtr(args, \"arg3\");\n"};
     }
     #[test]
     fn test_arg_list_one_arg() {

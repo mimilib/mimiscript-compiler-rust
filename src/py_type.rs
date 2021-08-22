@@ -20,7 +20,7 @@ impl PyType {
         if self.type_name == "" {
             return "void".to_string();
         }
-        return format!("{} *", self.type_name);
+        return "void *".to_string();
     }
     pub fn to_string(&self) -> String {
         return self.type_name.clone();
