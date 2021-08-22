@@ -12,15 +12,11 @@ use std::fs::File;
 use std::io::prelude::*;
 
 fn main() {
-    let mut compiler = Compiler::new(String::from("pikascript/"), String::from("pikascript/pikascript-api/"));
-    let mut file = File::open(format!("{}pikascript-api.py", compiler.source_path)).unwrap();
-    let mut picascript_api = String::new();
-    file.read_to_string(&mut picascript_api).unwrap();
-    let lines: Vec<&str> = picascript_api.split('\n').collect();
-    /* analyze each line of pikascript-api.py */
-    for line in lines.iter() {
-        compiler = Compiler::analyze_line(compiler, line.to_string());
-    }
+    let mut compiler = Compiler::new(
+        String::from("pikascript/"),
+        String::from("pikascript/pikascript-api/"),
+    );
+    compiler = Compiler::analyze_file(compiler, String::from("pikascript-api"));
     /* write to compiler-info about the info */
     let mut compiler_info_file =
         File::create(format!("{}compiler-info.txt", compiler.dist_path)).unwrap();

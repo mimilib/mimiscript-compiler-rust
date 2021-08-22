@@ -1,5 +1,7 @@
 use crate::class_info::ClassInfo;
 use std::collections::BTreeMap;
+use std::fs::File;
+use std::io::prelude::*;
 #[derive(Debug)]
 pub struct Compiler {
     pub dist_path: String,
@@ -18,6 +20,19 @@ impl Compiler {
         };
         return compiler;
     }
+
+    pub fn analyze_file(mut compiler: Compiler, file_name: String) -> Compiler {
+        let mut file = File::open(format!("{}{}.py", compiler.source_path, file_name)).unwrap();
+        let mut file_str = String::new();
+        file.read_to_string(&mut file_str).unwrap();
+        let lines: Vec<&str> = file_str.split('\n').collect();
+        /* analyze each line of pikascript-api.py */
+        for line in lines.iter() {
+            compiler = Compiler::analyze_line(compiler, line.to_string());
+        }
+        return compiler;
+    }
+
     pub fn analyze_line(mut compiler: Compiler, line: String) -> Compiler {
         if line.starts_with("#") {
             return compiler;
