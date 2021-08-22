@@ -60,7 +60,7 @@ fn main() {
             .unwrap();
         f.write("#include <stdio.h>\n".as_bytes()).unwrap();
         f.write("#include <stdlib.h>\n".as_bytes()).unwrap();
-        f.write("#include \"MimiObj.h\"\n".as_bytes()).unwrap();
+        f.write("#include \"PikaObj.h\"\n".as_bytes()).unwrap();
         f.write("\n".as_bytes()).unwrap();
         let new_class_fn_declear = format!("{};\n", class_info.new_class_fn_name());
         f.write(new_class_fn_declear.as_bytes()).unwrap();

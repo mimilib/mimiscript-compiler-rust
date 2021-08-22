@@ -51,7 +51,7 @@ impl MethodInfo {
     }
     pub fn method_api_name(&self) -> String {
         return format!(
-            "void {}_{}Method(MimiObj *self, Args *args)",
+            "void {}_{}Method(PikaObj *self, Args *args)",
             self.class_name, self.name
         );
     }
@@ -65,7 +65,7 @@ impl MethodInfo {
             None => String::from(""),
         };
         return format!(
-            "{} {}_{}(MimiObj *self{});\n",
+            "{} {}_{}(PikaObj *self{});\n",
             return_type_in_c, self.class_name, self.name, arg_list_in_c,
         );
     }
@@ -113,10 +113,10 @@ mod tests {
         );
         let define = method_info.as_ref().unwrap().method_impl_declear();
         let method_fn_impl = method_info.as_ref().unwrap().method_fn_impl();
-        assert_eq!(define, "char * Test_test(MimiObj *self, char * test, int test2);\n");
+        assert_eq!(define, "char * Test_test(PikaObj *self, char * test, int test2);\n");
         assert_eq!(
             method_fn_impl,
-            "void Test_testMethod(MimiObj *self, Args *args){\n    char * test = args_getStr(args, \"test\");\n    int test2 = args_getInt(args, \"test2\");\n    char * res = Test_test(self, test, test2);\n    method_returnStr(args, res);\n}\n\n"
+            "void Test_testMethod(PikaObj *self, Args *args){\n    char * test = args_getStr(args, \"test\");\n    int test2 = args_getInt(args, \"test2\");\n    char * res = Test_test(self, test, test2);\n    method_returnStr(args, res);\n}\n\n"
         );
     }
 
@@ -231,7 +231,7 @@ mod tests {
         );
         assert_eq!(
             method_fn_name,
-            String::from("void Test_testMethod(MimiObj *self, Args *args)")
+            String::from("void Test_testMethod(PikaObj *self, Args *args)")
         );
     }
 }
