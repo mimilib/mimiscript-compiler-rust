@@ -1,15 +1,18 @@
+from pikalib import *
+
+
 class PyObj(BaseObj):
 
-    def importClass(className: str, fp: FILE):
+    def importClass(className: str, fp: str):
         pass
 
-    def newObj(objName: str, className: str, fp: FILE):
+    def newObj(objName: str, className: str, fp: str):
         pass
 
-    def makeInlcude(fp: FILE):
+    def makeInlcude(fp: str):
         pass
 
-    def makeNewObj(fp: FILE):
+    def makeNewObj(fp: str):
         pass
 
     def getInclude() -> str:
@@ -28,13 +31,13 @@ class PyClass(SysObj):
 
 
 class PyMethod (SysObj):
-    def makeMethodFun(fp: FILE):
+    def makeMethodFun(fp: str):
         pass
 
-    def makeMethodDeclear(fp: FILE):
+    def makeMethodDeclear(fp: str):
         pass
 
-    def makeMethodDefine(fp: FILE):
+    def makeMethodDefine(fp: str):
         pass
 
 
@@ -46,7 +49,7 @@ class Compiler(SysObj):
     def build(pythonApiPath: str, outputPath: str) -> int:
         pass
 
-    def analyzeFile(pythonApiPath: str) -> int:
+    def analyzestr(pythonApiPath: str) -> int:
         pass
 
     def analyzeLine(line: str) -> int:

@@ -34,6 +34,12 @@ impl Compiler {
     }
 
     pub fn analyze_line(mut compiler: Compiler, line: String) -> Compiler {
+        if line.starts_with("from ") {
+            let tokens: Vec<&str> = line.split(" ").collect();
+            let file = tokens[1];
+            return Compiler::analyze_file(compiler, file.to_string());
+        }
+
         if line.starts_with("#") {
             return compiler;
         }
