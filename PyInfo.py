@@ -1,6 +1,3 @@
-from pikalib import *
-
-
 class PyObj(BaseObj):
 
     def importClass(className: str, fp: str):
@@ -29,7 +26,6 @@ class PyClass(SysObj):
     def makeHead(path: str):
         pass
 
-
 class PyMethod (SysObj):
     def makeMethodFun(fp: str):
         pass
@@ -38,19 +34,4 @@ class PyMethod (SysObj):
         pass
 
     def makeMethodDefine(fp: str):
-        pass
-
-
-class Compiler(SysObj):
-    obj = PyObj()
-    PyMethod()
-    PyClass()
-
-    def build(pythonApiPath: str, outputPath: str) -> int:
-        pass
-
-    def analyzestr(pythonApiPath: str) -> int:
-        pass
-
-    def analyzeLine(line: str) -> int:
         pass
