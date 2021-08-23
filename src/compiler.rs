@@ -28,13 +28,13 @@ impl Compiler {
         let lines: Vec<&str> = file_str.split('\n').collect();
         /* analyze each line of pikascript-api.py */
         for line in lines.iter() {
-            compiler = Compiler::analyze_line(compiler, line.to_string());
+            compiler = Compiler::analyze_line(compiler, line.to_string(), &file_name);
         }
         return compiler;
     }
 
-    pub fn analyze_line(mut compiler: Compiler, line: String) -> Compiler {
-        if line.starts_with("from ") {
+    pub fn analyze_line(mut compiler: Compiler, line: String, file_name: &String) -> Compiler {
+        if line.starts_with("impot ") {
             let tokens: Vec<&str> = line.split(" ").collect();
             let file = tokens[1];
             return Compiler::analyze_file(compiler, file.to_string());
@@ -44,7 +44,7 @@ impl Compiler {
             return compiler;
         }
         if line.starts_with("class") {
-            let class_now = match ClassInfo::new(&line) {
+            let class_now = match ClassInfo::new(&file_name, &line) {
                 Some(s) => s,
                 None => return compiler,
             };
@@ -97,15 +97,28 @@ mod tests {
     #[test]
     fn test_analyze() {
         let compiler = Compiler::new(String::from(""), String::from(""));
-        let compiler = Compiler::analyze_line(compiler, String::from("class Test(SuperTest):"));
-        let compiler = Compiler::analyze_line(compiler, String::from("    def test()"));
-        let compiler = Compiler::analyze_line(compiler, String::from("    testObj = TestObj()"));
-        let compiler = Compiler::analyze_line(compiler, String::from("    TestImport()"));
+        let compiler = Compiler::analyze_line(
+            compiler,
+            String::from("class Test(SuperTest):"),
+            &"Pkg".to_string(),
+        );
+        let compiler =
+            Compiler::analyze_line(compiler, String::from("    def test()"), &"Pkg".to_string());
+        let compiler = Compiler::analyze_line(
+            compiler,
+            String::from("    testObj = TestObj()"),
+            &"Pkg".to_string(),
+        );
+        let compiler = Compiler::analyze_line(
+            compiler,
+            String::from("    TestImport()"),
+            &"Pkg".to_string(),
+        );
 
-        let class_info = compiler.class_list.get("Test").unwrap();
-        let method_info = class_info.method_list.get("test").unwrap();
-        let object_info = class_info.object_list.get("testObj").unwrap();
-        let import_info = class_info.import_list.get("TestImport").unwrap();
+        let class_info = compiler.class_list.get("Pkg.Test").unwrap();
+        let method_info = class_info.method_list.get("Pkg.test").unwrap();
+        let object_info = class_info.object_list.get("Pkg.testObj").unwrap();
+        let import_info = class_info.import_list.get("Pkg.TestImport").unwrap();
         assert_eq!(class_info.this_class_name, "Test");
         assert_eq!(class_info.super_class_name, "SuperTest");
         assert_eq!(method_info.name, "test");

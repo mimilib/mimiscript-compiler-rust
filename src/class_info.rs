@@ -13,17 +13,22 @@ pub struct ClassInfo {
 }
 
 impl ClassInfo {
-    pub fn new(define: &String) -> Option<ClassInfo> {
+    pub fn new(file_name: &String, define: &String) -> Option<ClassInfo> {
         let define = define.strip_prefix("class ").unwrap().to_string();
         let define = define.replace(" ", "");
         let super_class_name = match my_string::cut(&define, '(', ')') {
             Some(s) => s,
             None => return None,
         };
-        let this_calss_name = match my_string::get_first_token(&define, '(') {
+        let mut this_calss_name = match my_string::get_first_token(&define, '(') {
             Some(s) => s,
             None => return None,
         };
+        if file_name != "main" {
+            this_calss_name = format!("{}_{}", file_name, this_calss_name);
+        } else {
+            this_calss_name = this_calss_name.clone();
+        }
         let new_class_info = ClassInfo {
             this_class_name: this_calss_name,
             super_class_name: super_class_name,
@@ -131,21 +136,31 @@ mod tests {
     #[test]
     fn test_analize() {
         assert_eq!(
-            ClassInfo::new(&String::from("class Test(SuperTest):"))
-                .unwrap()
-                .this_class_name,
+            ClassInfo::new(
+                &String::from("Pkg"),
+                &String::from("class Test(SuperTest):")
+            )
+            .unwrap()
+            .this_class_name,
             "Test"
         );
         assert_eq!(
-            ClassInfo::new(&String::from("class Test(SuperTest):"))
-                .unwrap()
-                .super_class_name,
+            ClassInfo::new(
+                &String::from("Pkg"),
+                &String::from("class Test(SuperTest):")
+            )
+            .unwrap()
+            .super_class_name,
             "SuperTest"
         );
     }
     #[test]
     fn test_push_method() {
-        let mut class_info = ClassInfo::new(&String::from("class Test(SuperTest):")).unwrap();
+        let mut class_info = ClassInfo::new(
+            &String::from("Pkg"),
+            &String::from("class Test(SuperTest):"),
+        )
+        .unwrap();
         class_info.push_method(String::from("def test(data: str)-> str:"));
         assert_eq!(
             class_info.method_list.get("test").unwrap().class_name,
@@ -179,7 +194,11 @@ mod tests {
     }
     #[test]
     fn test_push_object() {
-        let mut class_info = ClassInfo::new(&String::from("class Test(SuperTest):")).unwrap();
+        let mut class_info = ClassInfo::new(
+            &String::from("Pkg"),
+            &String::from("class Test(SuperTest):"),
+        )
+        .unwrap();
         class_info.push_object(String::from("testObj = TestObj()"));
         assert_eq!(
             class_info.object_list.get("testObj").unwrap().class_name,
@@ -204,7 +223,11 @@ mod tests {
     }
     #[test]
     fn test_push_import() {
-        let mut class_info = ClassInfo::new(&String::from("class Test(SuperTest):")).unwrap();
+        let mut class_info = ClassInfo::new(
+            &String::from("Pkg"),
+            &String::from("class Test(SuperTest):"),
+        )
+        .unwrap();
         class_info.push_import(String::from("TestObj()"));
         assert_eq!(
             class_info.import_list.get("TestObj").unwrap().class_name,

@@ -16,7 +16,7 @@ fn main() {
         String::from(""),
         String::from("pikascript-api/"),
     );
-    compiler = Compiler::analyze_file(compiler, String::from("pikascript-api"));
+    compiler = Compiler::analyze_file(compiler, String::from("main"));
     /* write to compiler-info about the info */
     let mut compiler_info_file =
         File::create(format!("{}compiler-info.txt", compiler.dist_path)).unwrap();
