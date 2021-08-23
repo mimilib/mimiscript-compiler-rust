@@ -49,7 +49,7 @@ mod tests {
             )
             .unwrap()
             .import_class_name,
-            String::from("ImportTest")
+            String::from("Pkg_ImportTest")
         );
         assert_eq!(
             ImportInfo::new(

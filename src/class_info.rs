@@ -159,7 +159,7 @@ mod tests {
             )
             .unwrap()
             .super_class_name,
-            "SuperTest"
+            "Pkg_SuperTest"
         );
     }
     #[test]
@@ -222,7 +222,7 @@ mod tests {
                 .get("testObj")
                 .unwrap()
                 .import_class_name,
-            "TestObj"
+            "Pkg_TestObj"
         );
         assert_eq!(
             class_info.object_list.get("testObj").unwrap().name,
@@ -238,16 +238,16 @@ mod tests {
         .unwrap();
         class_info.push_import(String::from("TestObj()"), &"Pkg".to_string());
         assert_eq!(
-            class_info.import_list.get("TestObj").unwrap().class_name,
+            class_info.import_list.get("Pkg_TestObj").unwrap().class_name,
             "Pkg_Test"
         );
         assert_eq!(
             class_info
                 .import_list
-                .get("TestObj")
+                .get("Pkg_TestObj")
                 .unwrap()
                 .import_class_name,
-            "TestObj"
+            "Pkg_TestObj"
         );
     }
 }
