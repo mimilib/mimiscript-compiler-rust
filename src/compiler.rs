@@ -34,7 +34,7 @@ impl Compiler {
     }
 
     pub fn analyze_line(mut compiler: Compiler, line: String, file_name: &String) -> Compiler {
-        if line.starts_with("impot ") {
+        if line.starts_with("import ") {
             let tokens: Vec<&str> = line.split(" ").collect();
             let file = tokens[1];
             return Compiler::analyze_file(compiler, file.to_string());
@@ -115,17 +115,17 @@ mod tests {
             &"Pkg".to_string(),
         );
 
-        let class_info = compiler.class_list.get("Pkg.Test").unwrap();
-        let method_info = class_info.method_list.get("Pkg.test").unwrap();
-        let object_info = class_info.object_list.get("Pkg.testObj").unwrap();
-        let import_info = class_info.import_list.get("Pkg.TestImport").unwrap();
-        assert_eq!(class_info.this_class_name, "Test");
+        let class_info = compiler.class_list.get("Pkg_Test").unwrap();
+        let method_info = class_info.method_list.get("test").unwrap();
+        let object_info = class_info.object_list.get("testObj").unwrap();
+        let import_info = class_info.import_list.get("TestImport").unwrap();
+        assert_eq!(class_info.this_class_name, "Pkg_Test");
         assert_eq!(class_info.super_class_name, "SuperTest");
         assert_eq!(method_info.name, "test");
-        assert_eq!(method_info.class_name, "Test");
+        assert_eq!(method_info.class_name, "Pkg_Test");
         assert_eq!(object_info.name, "testObj");
-        assert_eq!(object_info.class_name, "Test");
-        assert_eq!(import_info.class_name, "Test");
+        assert_eq!(object_info.class_name, "Pkg_Test");
+        assert_eq!(import_info.class_name, "Pkg_Test");
         assert_eq!(import_info.import_class_name, "TestImport");
     }
 }

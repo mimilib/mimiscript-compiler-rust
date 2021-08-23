@@ -142,7 +142,7 @@ mod tests {
             )
             .unwrap()
             .this_class_name,
-            "Test"
+            "Pkg_Test"
         );
         assert_eq!(
             ClassInfo::new(
@@ -164,7 +164,7 @@ mod tests {
         class_info.push_method(String::from("def test(data: str)-> str:"));
         assert_eq!(
             class_info.method_list.get("test").unwrap().class_name,
-            "Test"
+            "Pkg_Test"
         );
         assert_eq!(class_info.method_list.get("test").unwrap().name, "test");
         assert_eq!(
@@ -202,7 +202,7 @@ mod tests {
         class_info.push_object(String::from("testObj = TestObj()"));
         assert_eq!(
             class_info.object_list.get("testObj").unwrap().class_name,
-            "Test"
+            "Pkg_Test"
         );
         assert_eq!(
             class_info.object_list.get("testObj").unwrap().name,
@@ -231,7 +231,7 @@ mod tests {
         class_info.push_import(String::from("TestObj()"));
         assert_eq!(
             class_info.import_list.get("TestObj").unwrap().class_name,
-            "Test"
+            "Pkg_Test"
         );
         assert_eq!(
             class_info

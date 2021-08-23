@@ -8,10 +8,11 @@ pub struct ImportInfo {
 impl ImportInfo {
     pub fn new(class_name: &String, input_define: String) -> Option<ImportInfo> {
         let define = input_define.replace(" ", "");
-        let import_class_name = match my_string::get_first_token(&define, '(') {
+        let mut import_class_name = match my_string::get_first_token(&define, '(') {
             Some(token) => token,
             None => return None,
         };
+        import_class_name = import_class_name.replace(".", "_");
         return Some(ImportInfo {
             class_name: class_name.clone(),
             import_class_name: import_class_name,

@@ -13,10 +13,11 @@ impl ObjectInfo {
             Some(token) => token,
             None => return None,
         };
-        let import_class_name = match my_string::cut(&define, '=', '(') {
+        let mut import_class_name = match my_string::cut(&define, '=', '(') {
             Some(token) => token,
             None => return None,
         };
+        import_class_name = import_class_name.replace(".", "_");
         return Some(ObjectInfo {
             class_name: class_name.clone(),
             name: name,
