@@ -13,7 +13,7 @@ pub struct ClassInfo {
 }
 
 impl ClassInfo {
-    pub fn add_file_profix(file_name: &String, class_name: &String)->String{
+    pub fn add_file_profix(file_name: &String, class_name: &String) -> String {
         if file_name != "main" {
             return format!("{}_{}", file_name, class_name);
         } else {
@@ -27,6 +27,10 @@ impl ClassInfo {
         let super_class_name = match my_string::cut(&define, '(', ')') {
             Some(s) => s,
             None => return None,
+        };
+        let super_class_name = match super_class_name.find(".") {
+            None => ClassInfo::add_file_profix(&file_name, &super_class_name),
+            Some(x) => super_class_name.replace(".", "_"),
         };
         let mut this_calss_name = match my_string::get_first_token(&define, '(') {
             Some(s) => s,
