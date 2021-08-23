@@ -15,3 +15,6 @@ class Compiler(SysObj):
 
     def analyzeLine(line: str) -> int:
         pass
+
+class MyRoot(SysObj):
+    compiler = Compiler()

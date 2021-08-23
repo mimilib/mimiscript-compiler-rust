@@ -13,6 +13,14 @@ pub struct ClassInfo {
 }
 
 impl ClassInfo {
+    pub fn add_file_profix(file_name: &String, class_name: &String)->String{
+        if file_name != "main" {
+            return format!("{}_{}", file_name, class_name);
+        } else {
+            return class_name.clone();
+        }
+    }
+
     pub fn new(file_name: &String, define: &String) -> Option<ClassInfo> {
         let define = define.strip_prefix("class ").unwrap().to_string();
         let define = define.replace(" ", "");
@@ -24,11 +32,7 @@ impl ClassInfo {
             Some(s) => s,
             None => return None,
         };
-        if file_name != "main" {
-            this_calss_name = format!("{}_{}", file_name, this_calss_name);
-        } else {
-            this_calss_name = this_calss_name.clone();
-        }
+        this_calss_name = ClassInfo::add_file_profix(&file_name, &this_calss_name);
         let new_class_info = ClassInfo {
             this_class_name: this_calss_name,
             super_class_name: super_class_name,

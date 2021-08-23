@@ -1,4 +1,5 @@
 use crate::my_string;
+use crate::class_info;
 #[derive(Debug)]
 pub struct ImportInfo {
     pub class_name: String,
@@ -15,6 +16,10 @@ impl ImportInfo {
         let mut import_class_name = match my_string::get_first_token(&define, '(') {
             Some(token) => token,
             None => return None,
+        };
+        import_class_name = match import_class_name.find(".") {
+            None => class_info::ClassInfo::add_file_profix(&file_name, &import_class_name),
+            Some(x) => import_class_name.replace(".", "_"),
         };
         import_class_name = import_class_name.replace(".", "_");
         return Some(ImportInfo {
