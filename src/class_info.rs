@@ -14,10 +14,12 @@ pub struct ClassInfo {
 
 impl ClassInfo {
     pub fn add_file_profix(file_name: &String, class_name: &String) -> String {
-        if file_name != "main" {
-            return format!("{}_{}", file_name, class_name);
-        } else {
+        if file_name == "main" {
             return class_name.clone();
+        } else if class_name == "BaseObj" || class_name == "TinyObj" {
+            return class_name.clone();
+        } else {
+            return format!("{}_{}", file_name, class_name);
         }
     }
 
@@ -238,7 +240,11 @@ mod tests {
         .unwrap();
         class_info.push_import(String::from("TestObj()"), &"Pkg".to_string());
         assert_eq!(
-            class_info.import_list.get("Pkg_TestObj").unwrap().class_name,
+            class_info
+                .import_list
+                .get("Pkg_TestObj")
+                .unwrap()
+                .class_name,
             "Pkg_Test"
         );
         assert_eq!(
