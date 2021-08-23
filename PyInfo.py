@@ -16,16 +16,6 @@ class PyObj(BaseObj):
         pass
 
 
-class PyClass(SysObj):
-    def setSuper(superClassName: str):
-        pass
-
-    def makeApi(path: str):
-        pass
-
-    def makeHead(path: str):
-        pass
-
 class PyMethod (SysObj):
     def makeMethodFun(fp: str):
         pass
@@ -34,4 +24,16 @@ class PyMethod (SysObj):
         pass
 
     def makeMethodDefine(fp: str):
+        pass
+
+class PyClass(SysObj):
+    obj = PyObj()
+    PyMethod() 
+    def setSuper(superClassName: str):
+        pass
+
+    def makeApi(path: str):
+        pass
+
+    def makeHead(path: str):
         pass

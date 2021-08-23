@@ -12,10 +12,7 @@ use std::fs::File;
 use std::io::prelude::*;
 
 fn main() {
-    let mut compiler = Compiler::new(
-        String::from(""),
-        String::from("pikascript-api/"),
-    );
+    let mut compiler = Compiler::new(String::from(""), String::from("pikascript-api/"));
     compiler = Compiler::analyze_file(compiler, String::from("main"));
     /* write to compiler-info about the info */
     let mut compiler_info_file =

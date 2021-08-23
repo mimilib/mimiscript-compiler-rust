@@ -47,8 +47,8 @@ impl ClassInfo {
             .entry(method_info.name.clone())
             .or_insert(method_info);
     }
-    pub fn push_import(&mut self, import_define: String) {
-        let import_info = match ImportInfo::new(&self.this_class_name, import_define) {
+    pub fn push_import(&mut self, import_define: String, file_name: &String) {
+        let import_info = match ImportInfo::new(&self.this_class_name, import_define, &file_name) {
             Some(import) => import,
             None => return,
         };
@@ -56,8 +56,8 @@ impl ClassInfo {
             .entry(import_info.import_class_name.clone())
             .or_insert(import_info);
     }
-    pub fn push_object(&mut self, object_define: String) {
-        let object_info = match ObjectInfo::new(&self.this_class_name, object_define) {
+    pub fn push_object(&mut self, object_define: String, file_name: &String) {
+        let object_info = match ObjectInfo::new(&self.this_class_name, object_define, &file_name) {
             Some(object) => object,
             None => return,
         };
@@ -199,7 +199,7 @@ mod tests {
             &String::from("class Test(SuperTest):"),
         )
         .unwrap();
-        class_info.push_object(String::from("testObj = TestObj()"));
+        class_info.push_object(String::from("testObj = TestObj()"), &"Pkg".to_string());
         assert_eq!(
             class_info.object_list.get("testObj").unwrap().class_name,
             "Pkg_Test"
@@ -228,7 +228,7 @@ mod tests {
             &String::from("class Test(SuperTest):"),
         )
         .unwrap();
-        class_info.push_import(String::from("TestObj()"));
+        class_info.push_import(String::from("TestObj()"), &"Pkg".to_string());
         assert_eq!(
             class_info.import_list.get("TestObj").unwrap().class_name,
             "Pkg_Test"

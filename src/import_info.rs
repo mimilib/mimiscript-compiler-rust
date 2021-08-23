@@ -6,7 +6,11 @@ pub struct ImportInfo {
 }
 
 impl ImportInfo {
-    pub fn new(class_name: &String, input_define: String) -> Option<ImportInfo> {
+    pub fn new(
+        class_name: &String,
+        input_define: String,
+        file_name: &String,
+    ) -> Option<ImportInfo> {
         let define = input_define.replace(" ", "");
         let mut import_class_name = match my_string::get_first_token(&define, '(') {
             Some(token) => token,
@@ -33,15 +37,23 @@ mod tests {
     #[test]
     fn test_import_info() {
         assert_eq!(
-            ImportInfo::new(&String::from("Test"), String::from("ImportTest()"))
-                .unwrap()
-                .import_class_name,
+            ImportInfo::new(
+                &String::from("Test"),
+                String::from("ImportTest()"),
+                &"Pkg".to_string()
+            )
+            .unwrap()
+            .import_class_name,
             String::from("ImportTest")
         );
         assert_eq!(
-            ImportInfo::new(&String::from("Test"), String::from("ImportTest()"))
-                .unwrap()
-                .class_name,
+            ImportInfo::new(
+                &String::from("Test"),
+                String::from("ImportTest()"),
+                &"Pkg".to_string()
+            )
+            .unwrap()
+            .class_name,
             String::from("Test")
         );
     }

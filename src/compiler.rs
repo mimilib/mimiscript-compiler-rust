@@ -75,7 +75,7 @@ impl Compiler {
                 .class_list
                 .get_mut(&compiler.class_now_name.clone().unwrap())
                 .unwrap();
-            class_now.push_object(line);
+            class_now.push_object(line, &file_name);
             return compiler;
         }
         if line.starts_with("    ") && line.contains("(") && line.contains(")") {
@@ -84,7 +84,7 @@ impl Compiler {
                 .class_list
                 .get_mut(&compiler.class_now_name.clone().unwrap())
                 .unwrap();
-            class_now.push_import(line);
+            class_now.push_import(line, &file_name);
             return compiler;
         }
         return compiler;

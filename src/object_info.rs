@@ -7,7 +7,11 @@ pub struct ObjectInfo {
 }
 
 impl ObjectInfo {
-    pub fn new(class_name: &String, input_define: String) -> Option<ObjectInfo> {
+    pub fn new(
+        class_name: &String,
+        input_define: String,
+        file_name: &String,
+    ) -> Option<ObjectInfo> {
         let define = input_define.replace(" ", "");
         let name = match my_string::get_first_token(&define, '=') {
             Some(token) => token,
@@ -47,21 +51,33 @@ mod tests {
     #[test]
     fn test_object_info() {
         assert_eq!(
-            ObjectInfo::new(&String::from("Test"), String::from("test=ImportTest()"))
-                .unwrap()
-                .import_class_name,
+            ObjectInfo::new(
+                &String::from("Test"),
+                String::from("test=ImportTest()"),
+                &"Pkg".to_string()
+            )
+            .unwrap()
+            .import_class_name,
             String::from("ImportTest")
         );
         assert_eq!(
-            ObjectInfo::new(&String::from("Test"), String::from("test=ImportTest()"))
-                .unwrap()
-                .name,
+            ObjectInfo::new(
+                &String::from("Test"),
+                String::from("test=ImportTest()"),
+                &"Pkg".to_string()
+            )
+            .unwrap()
+            .name,
             String::from("test")
         );
         assert_eq!(
-            ObjectInfo::new(&String::from("Test"), String::from("test=ImportTest()"))
-                .unwrap()
-                .class_name,
+            ObjectInfo::new(
+                &String::from("Test"),
+                String::from("test=ImportTest()"),
+                &"Pkg".to_string()
+            )
+            .unwrap()
+            .class_name,
             String::from("Test")
         );
     }
