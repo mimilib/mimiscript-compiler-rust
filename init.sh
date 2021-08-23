@@ -1,1 +1,1 @@
-mkdir pikascript/pikascript-api
+mkdir pikascript-api
