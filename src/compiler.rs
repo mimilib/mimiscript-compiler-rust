@@ -1,4 +1,5 @@
 use crate::class_info::ClassInfo;
+use crate::script::Script;
 use std::collections::BTreeMap;
 use std::fs::File;
 use std::io::prelude::*;
@@ -36,6 +37,13 @@ impl Compiler {
             return compiler;
         }
         if line.contains("(") && line.contains(")") && line.contains("=") {
+            if Script::assert(class_now, &line) {
+                class_now
+                    .script_list
+                    .entry(line.clone())
+                    .or_insert(Script::new(&line));
+                return compiler;
+            }
             class_now.push_object(line, &file_name);
             return compiler;
         }

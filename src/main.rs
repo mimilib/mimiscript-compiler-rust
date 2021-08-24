@@ -7,6 +7,7 @@ mod my_string;
 mod object_info;
 mod py_arg;
 mod py_type;
+mod script;
 use compiler::*;
 use std::fs::File;
 use std::io::prelude::*;

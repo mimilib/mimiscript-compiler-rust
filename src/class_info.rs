@@ -1,6 +1,7 @@
 use crate::import_info::ImportInfo;
 use crate::method_info::MethodInfo;
 use crate::my_string;
+use crate::script::Script;
 use crate::object_info::ObjectInfo;
 use std::collections::BTreeMap;
 #[derive(Debug)]
@@ -10,6 +11,7 @@ pub struct ClassInfo {
     pub method_list: BTreeMap<String, MethodInfo>,
     pub object_list: BTreeMap<String, ObjectInfo>,
     pub import_list: BTreeMap<String, ImportInfo>,
+    pub script_list: BTreeMap<String, Script>,
 }
 
 impl ClassInfo {
@@ -45,6 +47,7 @@ impl ClassInfo {
             method_list: BTreeMap::new(),
             object_list: BTreeMap::new(),
             import_list: BTreeMap::new(),
+            script_list: BTreeMap::new(),
         };
         return Some(new_class_info);
     }
