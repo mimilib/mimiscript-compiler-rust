@@ -102,4 +102,5 @@ fn main() {
     f.write("\n".as_bytes()).unwrap();
     f.write("PikaObj * pikaScriptInit();\n".as_bytes()).unwrap();
     f.write("\n".as_bytes()).unwrap();
+    f.write("#endif\n".as_bytes()).unwrap();
 }

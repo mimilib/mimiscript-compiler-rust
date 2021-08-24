@@ -27,7 +27,7 @@ impl Compiler {
         let class_now = match compiler.class_list.get_mut(&"PikaMain".to_string()) {
             Some(class_now) => class_now,
             None => compiler.class_list.entry(class_name.clone()).or_insert(
-                ClassInfo::new(&file_name, &"class PikaMain(BaseObj):".to_string()).unwrap(),
+                ClassInfo::new(&file_name, &"class PikaMain(PikaStdLib.SysObj):".to_string()).unwrap(),
             ),
         };
         compiler.class_now_name = Some(class_name.clone());
