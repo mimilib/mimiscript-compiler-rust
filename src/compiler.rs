@@ -43,6 +43,18 @@ impl Compiler {
         if line.starts_with("#") {
             return compiler;
         }
+
+        if file_name == "main" {
+            let class_now =
+                ClassInfo::new(&file_name, &String::from("class PikaMain(BaseObj):")).unwrap();
+            let class_name = class_now.this_class_name.clone();
+            compiler
+                .class_list
+                .entry(class_name.clone())
+                .or_insert(class_now);
+            compiler.class_now_name = Some(class_name.clone());
+        }
+
         if line.starts_with("class") {
             let class_now = match ClassInfo::new(&file_name, &line) {
                 Some(s) => s,

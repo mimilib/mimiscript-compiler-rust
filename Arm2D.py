@@ -1,3 +1,5 @@
+from PikaObj import *
+
 class Line(TinyObj):
     def new():
         pass
