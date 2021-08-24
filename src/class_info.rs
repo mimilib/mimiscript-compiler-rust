@@ -1,8 +1,8 @@
 use crate::import_info::ImportInfo;
 use crate::method_info::MethodInfo;
 use crate::my_string;
-use crate::script::Script;
 use crate::object_info::ObjectInfo;
+use crate::script::Script;
 use std::collections::BTreeMap;
 #[derive(Debug)]
 pub struct ClassInfo {
@@ -11,7 +11,7 @@ pub struct ClassInfo {
     pub method_list: BTreeMap<String, MethodInfo>,
     pub object_list: BTreeMap<String, ObjectInfo>,
     pub import_list: BTreeMap<String, ImportInfo>,
-    pub script_list: BTreeMap<String, Script>,
+    pub script_list: Script,
 }
 
 impl ClassInfo {
@@ -47,7 +47,7 @@ impl ClassInfo {
             method_list: BTreeMap::new(),
             object_list: BTreeMap::new(),
             import_list: BTreeMap::new(),
-            script_list: BTreeMap::new(),
+            script_list: Script::new(),
         };
         return Some(new_class_info);
     }
@@ -104,6 +104,16 @@ impl ClassInfo {
             method_impl.push_str(&method_info.method_fn_impl());
         }
         return method_impl;
+    }
+
+    pub fn script_fn(&self) -> String {
+        let mut script_fn = String::new();
+        script_fn.push_str("PikaObj * PikaScriptInit(){\r\n");
+        script_fn.push_str("    PikaObj * pikaMain = newRootObj(\"pikaMain\", New_PikaMain);\r\n");
+        script_fn.push_str(&self.script_list.content);
+        script_fn.push_str("    return pikaMain;\r\n");
+        script_fn.push_str("}\r\n\r\n");
+        return script_fn;
     }
 
     pub fn new_class_fn(&self) -> String {

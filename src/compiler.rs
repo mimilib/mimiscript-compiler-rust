@@ -38,14 +38,14 @@ impl Compiler {
         }
         if line.contains("(") && line.contains(")") && line.contains("=") {
             if Script::assert(class_now, &line) {
-                class_now
-                    .script_list
-                    .entry(line.clone())
-                    .or_insert(Script::new(&line));
+                class_now.script_list.add(&line);
                 return compiler;
             }
             class_now.push_object(line, &file_name);
             return compiler;
+        }
+        if line.contains("(") && line.contains(")") {
+            class_now.script_list.add(&line);
         }
         return compiler;
     }

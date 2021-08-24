@@ -64,4 +64,22 @@ fn main() {
         f.write("\n".as_bytes()).unwrap();
         f.write("#endif\n".as_bytes()).unwrap();
     }
+    /* make the pikascript.c */
+    let api_file_path = format!("{}pikaScript.c", compiler.dist_path);
+    let mut f = File::create(api_file_path).unwrap();
+    f.write("/* ******************************** */\n".as_bytes())
+        .unwrap();
+    f.write("/* Warning! Don't modify this file! */\n".as_bytes())
+        .unwrap();
+    f.write("/* ******************************** */\n".as_bytes())
+        .unwrap();
+    f.write("#include \"PikaMain.h\"\n".as_bytes()).unwrap();
+    f.write("#include <stdio.h>\n".as_bytes()).unwrap();
+    f.write("#include <stdlib.h>\n".as_bytes()).unwrap();
+    f.write("\n".as_bytes()).unwrap();
+    let pika_main = compiler
+        .class_list
+        .get_mut(&"PikaMain".to_string())
+        .unwrap();
+    f.write(pika_main.script_fn().as_bytes()).unwrap();
 }

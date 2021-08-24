@@ -2,15 +2,17 @@ use crate::class_info::ClassInfo;
 use crate::my_string;
 #[derive(Debug)]
 pub struct Script {
-    content: String,
+    pub content: String,
 }
 
 impl Script {
-    pub fn new(content: &String) -> Script {
-        let script = Script {
-            content: content.clone(),
+    pub fn new() -> Script {
+        return Script {
+            content: String::new(),
         };
-        return script;
+    }
+    pub fn add(&mut self, content: &String) {
+        self.content.push_str(&Script::obj_run(content));
     }
     pub fn assert(class_info: &ClassInfo, content: &String) -> bool {
         let cmd = my_string::cut(content, '=', '(').unwrap();
@@ -26,5 +28,8 @@ impl Script {
             }
         }
         return false;
+    }
+    pub fn obj_run(cmd: &String) -> String {
+        return format!("    obj_run(PikaMain, \"{}\");\r\n", cmd);
     }
 }
