@@ -82,4 +82,24 @@ fn main() {
         .get_mut(&"PikaMain".to_string())
         .unwrap();
     f.write(pika_main.script_fn().as_bytes()).unwrap();
+    /* make the pikascript.h */
+    let api_file_path = format!("{}pikaScript.h", compiler.dist_path);
+    let mut f = File::create(api_file_path).unwrap();
+    f.write("/* ******************************** */\n".as_bytes())
+        .unwrap();
+    f.write("/* Warning! Don't modify this file! */\n".as_bytes())
+        .unwrap();
+    f.write("/* ******************************** */\n".as_bytes())
+        .unwrap();
+    f.write(format!("#ifndef __{}__H\n", "pikaScript").as_bytes())
+        .unwrap();
+    f.write(format!("#define __{}__H\n", "pikaScript").as_bytes())
+        .unwrap();
+    f.write("#include <stdio.h>\n".as_bytes()).unwrap();
+    f.write("#include <stdlib.h>\n".as_bytes()).unwrap();
+    f.write("#include \"PikaObj.h\"\n".as_bytes()).unwrap();
+    f.write("#include \"PikaMain.h\"\n".as_bytes()).unwrap();
+    f.write("\n".as_bytes()).unwrap();
+    f.write("PikaObj * pikaScriptInit();\n".as_bytes()).unwrap();
+    f.write("\n".as_bytes()).unwrap();
 }

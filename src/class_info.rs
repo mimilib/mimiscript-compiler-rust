@@ -108,7 +108,7 @@ impl ClassInfo {
 
     pub fn script_fn(&self) -> String {
         let mut script_fn = String::new();
-        script_fn.push_str("PikaObj * PikaScriptInit(){\r\n");
+        script_fn.push_str("PikaObj * pikaScriptInit(){\r\n");
         script_fn.push_str("    PikaObj * pikaMain = newRootObj(\"pikaMain\", New_PikaMain);\r\n");
         script_fn.push_str(&self.script_list.content);
         script_fn.push_str("    return pikaMain;\r\n");
