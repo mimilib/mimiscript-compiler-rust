@@ -20,6 +20,27 @@ impl Compiler {
         };
         return compiler;
     }
+    pub fn analyze_main_line(mut compiler: Compiler, line: String) -> Compiler {
+        let file_name = "main".to_string();
+        let class_name = "PikaMain".to_string();
+        let class_now = match compiler.class_list.get_mut(&"PikaMain".to_string()) {
+            Some(class_now) => class_now,
+            None => compiler.class_list.entry(class_name.clone()).or_insert(
+                ClassInfo::new(&file_name, &"class PikaMain(BaseObj):".to_string()).unwrap(),
+            ),
+        };
+        compiler.class_now_name = Some(class_name.clone());
+
+        if line.starts_with("def ") {
+            class_now.push_method(line);
+            return compiler;
+        }
+        if line.contains("(") && line.contains(")") && line.contains("=") {
+            class_now.push_object(line, &file_name);
+            return compiler;
+        }
+        return compiler;
+    }
 
     pub fn analyze_file(mut compiler: Compiler, file_name: String) -> Compiler {
         let mut file = File::open(format!("{}{}.py", compiler.source_path, file_name)).unwrap();
@@ -42,17 +63,6 @@ impl Compiler {
 
         if line.starts_with("#") {
             return compiler;
-        }
-
-        if file_name == "main" {
-            let class_now =
-                ClassInfo::new(&file_name, &String::from("class PikaMain(BaseObj):")).unwrap();
-            let class_name = class_now.this_class_name.clone();
-            compiler
-                .class_list
-                .entry(class_name.clone())
-                .or_insert(class_now);
-            compiler.class_now_name = Some(class_name.clone());
         }
 
         if line.starts_with("class") {
@@ -99,6 +109,11 @@ impl Compiler {
             class_now.push_import(line, &file_name);
             return compiler;
         }
+
+        if file_name == "main" {
+            return Compiler::analyze_main_line(compiler, line);
+        }
+
         return compiler;
     }
 }
