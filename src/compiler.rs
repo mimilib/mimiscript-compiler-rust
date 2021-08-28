@@ -27,7 +27,11 @@ impl Compiler {
         let class_now = match compiler.class_list.get_mut(&"PikaMain".to_string()) {
             Some(class_now) => class_now,
             None => compiler.class_list.entry(class_name.clone()).or_insert(
-                ClassInfo::new(&file_name, &"class PikaMain(PikaStdLib.SysObj):".to_string()).unwrap(),
+                ClassInfo::new(
+                    &file_name,
+                    &"class PikaMain(PikaStdLib.SysObj):".to_string(),
+                )
+                .unwrap(),
             ),
         };
         compiler.class_now_name = Some(class_name.clone());
@@ -51,6 +55,7 @@ impl Compiler {
     }
 
     pub fn analyze_file(mut compiler: Compiler, file_name: String) -> Compiler {
+        println!("analyzing file: {}{}.py", compiler.source_path, file_name);
         let mut file = File::open(format!("{}{}.py", compiler.source_path, file_name)).unwrap();
         let mut file_str = String::new();
         file.read_to_string(&mut file_str).unwrap();
