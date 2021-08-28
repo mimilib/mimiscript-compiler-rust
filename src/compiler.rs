@@ -68,6 +68,7 @@ impl Compiler {
     }
 
     pub fn analyze_line(mut compiler: Compiler, line: String, file_name: &String) -> Compiler {
+        let line = line.replace("\r", "");
         if line.starts_with("import ") {
             let tokens: Vec<&str> = line.split(" ").collect();
             let file = tokens[1];
